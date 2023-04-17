@@ -1,6 +1,12 @@
 @extends('base')
-@section('title', 'Acueil Blog')
+@section('title')
+
+{{ $category->name }}
+
+@endsection
+
 @section('content')
+
 
 <div>
 <ul class="nav justify-content-center">
@@ -16,6 +22,5 @@
 </div>
 
 @include('blog.indexArticle')
-
 
 @endsection

@@ -14,7 +14,6 @@
 </head>
 <?php 
 
-
 ?>
 <body>
 <div class="p-3 mb-2 bg-primary text-white">
@@ -22,7 +21,7 @@
   <li class="nav-item">
     <a class="nav-link   text-white " href="{{ route('blog.index') }}">Blog</a>
   </li>
-  <li class="nav-item">
+  <li class="nav-item" >
     <a class="nav-link  text-white " href="/" >Accueil test</a>
   </li>
   <li class="nav-item">
@@ -30,6 +29,7 @@
   </li>
 </ul>
 </div>
+
 
     <div class="container">
       

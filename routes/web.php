@@ -33,4 +33,6 @@ route::prefix('/blog')->name('blog.')->controller(BlogController::class)->group(
     Route::get('/{post}/edit', 'edit')->name('edit');
     Route::patch('/{post}/edit', 'update')->name('update');
 
+    Route::get('/{categorie}/posts', 'articleCategorie')->name('articleCategorie');
+
 });
