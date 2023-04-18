@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use App\Models\Post;
+use App\Models\User;
 use App\Models\Category;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\FormPostRequest;
 use App\Http\Requests\CreatePostRequest;
+use Illuminate\Support\Facades\Hash;
 
 class BlogController extends Controller
 {
@@ -117,7 +119,6 @@ class BlogController extends Controller
         //Post::has('tags', '>=', 1)->get();
 
         /* Recuperartion des tags et category associés à un nos post */
-
        
         return view('blog.index', [
             'categories' => Category::paginate(3),

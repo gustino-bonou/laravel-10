@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 
@@ -18,6 +19,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/login', [AuthController::class, 'formLogin'])->name('auth.formLogin');
+Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+Route::delete('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+Route::get('/register', [AuthController::class, 'formRegister'])->name('auth.register');
+Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
+
+
 route::prefix('/blog')->name('blog.')->controller(BlogController::class)->group(function(){
 
     Route::get('/', 'index')->name('index'); 
@@ -27,11 +35,11 @@ route::prefix('/blog')->name('blog.')->controller(BlogController::class)->group(
     'slug'=>'[a-z0-9\-]+'
     ])->name('show'); 
 
-    Route::get('/new', 'create')->name('create');
-    Route::post('/new', 'store')->name('store');
+    Route::get('/new', 'create')->name('create')->middleware('auth');
+    Route::post('/new', 'store')->name('store')->middleware('auth');
 
-    Route::get('/{post}/edit', 'edit')->name('edit');
-    Route::patch('/{post}/edit', 'update')->name('update');
+    Route::get('/{post}/edit', 'edit')->name('edit')->middleware('auth');
+    Route::patch('/{post}/edit', 'update')->name('update')->middleware('auth');
 
     Route::get('/{categorie}/posts', 'articleCategorie')->name('articleCategorie');
 
