@@ -16,9 +16,18 @@
             @endforeach
         @endif
 
+        @if($post->image)
+            <div>
+                <img style="margin-top: 5%; width: 100%; height: 200px; object-fit: cover" 
+                src="{{ $post->imageUrl()}}" alt="{{ $post->title }}"
+                class="rounded float-right float-xl-left " >
+            </div>
+        @endif
 
+
+    </p>
     <p>
-        {{ $post->content }}
+        {{ strlen($post->content)<200 ? $post->content : substr($post->content, 200) }}
     </p>
     <p>
 

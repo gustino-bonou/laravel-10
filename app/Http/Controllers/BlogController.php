@@ -4,15 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use App\Models\Post;
-use App\Models\User;
 use App\Models\Category;
 use Illuminate\View\View;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\FormPostRequest;
-use App\Http\Requests\CreatePostRequest;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+
 
 class BlogController extends Controller
 {
@@ -164,14 +161,16 @@ class BlogController extends Controller
     */
     public function store(FormPostRequest $request){
         
-        $data = $request->validated(); 
+        
+       
 
-        
-        
-        $post = Post::create($data);
+        //on met le chemin de l'image dans les donnees à sauvegarder
+
+        $post = new Post();
+
+        $post = Post::create($this->extractData($post, $request));
 
         $post->tags()->sync($request->validated('tags'));
-
 
         return redirect()->route('blog.show', ['slug' => $post->slug, 'post' => $post->id])->with('success', "L'article a été bien sauvegardé");
         
@@ -188,9 +187,9 @@ class BlogController extends Controller
     }
 
     public function update(Post $post, FormPostRequest $request) {        
-        
-    
-        $post->update($request -> validated());
+
+
+        $post->update($this->extractData($post, $request));
 
         //Avec la ligne suivante, on recupere la list des tags liés au post
         //on fait sunc pour pouvoir modifier à présent cette liste et y mettre les valeurs qui
@@ -202,6 +201,45 @@ class BlogController extends Controller
 
 
         return redirect()->route('blog.show', ['slug' => $post->slug, 'post' => $post->id])->with('success', "L'article a été bien modifié");
+    }
+
+    private function extractData(Post $post, FormPostRequest $request):array{
+
+        $data = $request->validated(); 
+
+        /* UploadedFile|null */
+
+        //ici on recupere l'image
+        $image = $request->validated('image');
+
+        //on sauvegarde l'image avec la methode image
+        /* Il y a un fichier filesysteme dans cofig qui contient le systeme de fichier
+        Ce fichier présente trois endroits où on peut sauvegarder les fichiers. Il y a le 
+        local qui va dans le dossier app/atorage/app, le disk publique va placer les fichiers dans app/public
+        et S3 pour envoyer de fichiers sur un serveur distant 
+        On peut créer autant de disque qu'on veut, par defaut si on précise
+        pas de disk, les fichiers sont envoyés vers le disk local
+        Comme nous on veut des images qui seront accessible a tout le monde, on place
+        le fichiers sur le disk public
+
+        La methodestore prend en argument le chemin du ficher(là où ça sera stocké dans le projet)
+        le deuxieme paraùmetre est le dossier dans lequel on va le mettre (public ici)
+
+        cette methode retourne le chemin relatifdu fichier
+        */
+
+        if($image === null || $image->getError()){
+            return $data;
+        }
+
+        if($post->image){
+            Storage::disk('public')->delete($post->image);
+        }
+
+        $data['image']  = $image->store('blog','public');
+
+        return $data;
+
     }
 
     public function articleCategorie($categorie){

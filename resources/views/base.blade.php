@@ -23,7 +23,7 @@
     <a class="nav-link   text-white " href="{{ route('blog.index') }}">Blog</a>
   </li>
   <li class="nav-item p-2 bd-highlight" >
-    <a class="nav-link  text-white " href="/" >Accueil test</a>
+    <a class="nav-link  text-white " href="{{ route('blog.create') }}" >Créer un article</a>
   </li>
   <li class="nav-item ml-auto p-2 bd-highlight">
     @auth
@@ -46,12 +46,6 @@
       <a class="nav-link text-white" href="{{ route('auth.login') }}">Se connecter</a>
     @endguest
   </li>
-
-
-
-
-
-
 </ul>
 </div>
 

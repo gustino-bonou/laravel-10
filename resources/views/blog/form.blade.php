@@ -1,6 +1,6 @@
 
 
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
 
     @csrf
 
@@ -68,6 +68,16 @@
             {{ $message }} 
         @enderror
             
+   </div>
+
+   <div class="form-group">
+
+    <input type="file" name="image" id= "image" class="form-control">
+
+    @error('image')
+        {{ $message }} 
+    @enderror
+        
    </div>
 
     <button class="btn btn-primary">

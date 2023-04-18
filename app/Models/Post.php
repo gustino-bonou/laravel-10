@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Tag;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Post extends Model
@@ -15,7 +16,8 @@ class Post extends Model
         'title',
         'slug',
         'content',
-        'category_id'
+        'category_id',
+        'image'
     ];
 
     //afinde notifier que cette article là appartient à une catégorie
@@ -34,5 +36,10 @@ class Post extends Model
    //relation belogsToMany, pour dire qu'un article à plusieurs tags
    public function tags() {
     return $this->belongsToMany(Tag::class);
+   }
+
+   //foncyion pour retourner le chemin de l'image de post
+   public function imageUrl(){
+    return Storage::url($this->image);
    }
 }

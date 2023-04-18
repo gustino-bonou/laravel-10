@@ -31,7 +31,9 @@ class FormPostRequest extends FormRequest
             //ce champ est requis, et doit exister dans le table catégories correspondant à la colonne id
             'category_id' => ['required', 'exists:categories,id'],
             //ce champ est requis, c'est un tableau et doit exister dans le table tags correspondant à la colonne id
-            'tags' => ['array', 'exists:tags,id', 'required']
+            'tags' => ['array', 'exists:tags,id', 'required'],
+            //validation de l'image, on pourrait limiter le type, taille, dimensions...
+            'image' => ['image', 'max:2000']
         ];
     }
 
