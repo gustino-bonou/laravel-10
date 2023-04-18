@@ -23,10 +23,10 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'min:6', 'regex:/^[A-Za-z]+$/'],
-            'email' => ['required', 'email'],
-            'password' => ['required', 'min:8', 'regex:/^[A-Z0-9a-z]+$/'],
-            'password2' => ['required', 'min:8',]
+            'name' => ['required', 'min:5',],
+            'email' => ['required', 'email'], 
+            'password' => ['required','min:3', 'confirmed', 'regex:/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/'],
+            'password_confirmation' => ['required', ]
         ];
     }
 }

@@ -53,17 +53,14 @@
 <div class="form-group">
 
 
-    <label for="password2">Confirmer Mot de passe</label>
-    <input type="password2" name="password2" id= "password2" class="form-control">    
+    <label for="password_confirmation">Confirmer Mot de passe</label>
+    <input type="password" name="password_confirmation" id= "password_confirmation" class="form-control">    
 
-    @error('password')
+    @error('password_confirmation')
         {{ $message }} 
     @enderror
         
 </div>
-
-
-
 <button class="btn btn-primary">S'inscrire</button>
 
 </form>

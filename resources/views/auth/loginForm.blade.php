@@ -33,7 +33,13 @@
     @enderror
         
 </div>
-<button class="btn btn-primary"> Se connecter </button>
+<div class="nav p-3 mb-2  d-flex bd-highlight mb-3">
+
+    <button class="btn btn-primary  text-white nav-item  p-2 bd-highlight">Se connecter</button>
+
+    <a class="nav-link   text-primary nav-item ml-auto p-2 bd-highlight" href="{{ route('auth.register') }}">Vous n'avez pas de compte ?</a>
+     
+</div>
 </form>
 </div>
 </div>

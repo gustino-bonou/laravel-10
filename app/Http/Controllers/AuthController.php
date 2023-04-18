@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -39,5 +42,34 @@ class AuthController extends Controller
     public function formRegister(){
 
         return view('auth.formRegister');
+    }
+    public function register(RegisterRequest $request){
+
+
+        $name = $request->validated('name'); 
+        $email = $request->validated('email'); 
+        $password = Hash::make( $request->validated('password')); 
+
+        $userData = [
+            'name' => $name,
+            'email' => $email,
+            'password' => $password
+        ];
+
+       $users = User::create($userData);
+
+       if($users){
+        $request->session()->regenerate();
+        Auth::attempt($userData);
+        return  to_route('blog.index');
+       }
+
+       return  to_route('auth.register')->with([
+        'erreurInscription' => "Une erreur s'est produitre"
+    ])->withInput(['email', 'name']);
+
+       
+
+        
     }
 }

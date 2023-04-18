@@ -16,37 +16,41 @@
 
 ?>
 <body>
-<div class="p-3 mb-2 bg-primary text-white">
-<ul class="nav justify-content-start ">
- <li class="nav-item">
+
+<div class="">
+<ul class="nav p-3 mb-2 bg-primary d-flex bd-highlight mb-3">
+ <li class="nav-item  p-2 bd-highlight">
     <a class="nav-link   text-white " href="{{ route('blog.index') }}">Blog</a>
   </li>
-  <li class="nav-item" >
+  <li class="nav-item p-2 bd-highlight" >
     <a class="nav-link  text-white " href="/" >Accueil test</a>
   </li>
-  <li class="nav-item">
-    <a class="nav-link disabled  " href="#" tabindex="-1" aria-disabled="false">Link</a>
+  <li class="nav-item ml-auto p-2 bd-highlight">
+    @auth
+
+    <div class="justify-content-center">
+
+    <a class="nav-link   text-white " href="{{ route('blog.index') }}">{{ \Illuminate\Support\Facades\Auth::user()->name }}</a>
+    
+    <form action="{{ route('auth.logout') }} " method="post">
+  
+      @method("delete")
+      @csrf
+      
+      <button class="nav-link btn btn-primary nav-item">Se déconnecter </button>
+    </form>
+  </div>
+    @endauth
+  
+    @guest
+      <a class="nav-link text-white" href="{{ route('auth.login') }}">Se connecter</a>
+    @endguest
   </li>
 
 
 
 
-  @auth
 
-  <a class="nav-link   text-white " href="{{ route('blog.index') }}">{{ \Illuminate\Support\Facades\Auth::user()->name }}</a>
-  
-  <form action="{{ route('auth.logout') }} " method="post">
-
-    @method("delete")
-    @csrf
-    
-    <button class="nav-link btn btn-primary">Se déconnecter </button>
-  </form>
-  @endauth
-
-  @guest
-    <a class="nav-link text-white" href="{{ route('auth.login') }}">Se connecter</a>
-  @endguest
 
 </ul>
 </div>
