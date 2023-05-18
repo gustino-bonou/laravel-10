@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\TaskController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +28,7 @@ Route::get('/register', [AuthController::class, 'formRegister'])->name('auth.reg
 Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
 
 
-route::prefix('/blog')->name('blog.')->controller(BlogController::class)->group(function(){
+Route::prefix('/blog')->name('blog.')->controller(BlogController::class)->group(function(){
 
     Route::get('/', 'index')->name('index'); 
 
@@ -44,3 +46,27 @@ route::prefix('/blog')->name('blog.')->controller(BlogController::class)->group(
     Route::get('/{categorie}/posts', 'articleCategorie')->name('articleCategorie');
 
 });
+
+Route::resource('/task', TaskController::class)->middleware('auth')->except(['show']);
+
+Route::prefix('/task')->name('task.')->middleware('auth')->group(function(){
+
+Route::get('notifiable/{tache}', [TaskController::class, 'setNotifiableColumn'])->name('notifiable');
+Route::get('{id}/finish', [TaskController::class, 'marqueToFinish'])->name('marque.finish');
+Route::get('{id}/begin', [TaskController::class, 'marqueToBegin'])->name('marque.begin');
+Route::get('statistiques', [TaskController::class, 'statistiques'])->name('statistiques');  
+
+Route::get('terminees', [TaskController::class, 'tachesTerminees'])->name('terminees');
+Route::get('en_cours', [TaskController::class, 'tachesEncours'])->name('en_cours');
+Route::get('a_venir', [TaskController::class, 'tachesAVenir'])->name('a_venir');
+Route::get('terminees/retard', [TaskController::class, 'tasksTermineesRetard'])->name('retard');
+
+});
+
+Route::resource('/group', GroupController::class)->middleware('auth');
+
+Route::prefix('/group')->name('group.')->middleware('auth')->group(function(){
+
+
+});
+
