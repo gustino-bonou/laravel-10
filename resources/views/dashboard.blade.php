@@ -18,6 +18,12 @@
           
           <ul class="nav flex-column">
             <li class="nav-item mb-3">
+                <a href="{{ route('task.create') }}" class="@if ($route == 'task.create')
+                text-dark
+            @endif">Créer une tache</a>
+            </li>
+
+            <li class="nav-item mb-3">
                 <a href="{{ route('task.index') }}" class="@if ($route == 'task.index')
                 text-dark
             @endif">Toutes mes taches</a>

@@ -47,26 +47,35 @@ Route::prefix('/blog')->name('blog.')->controller(BlogController::class)->group(
 
 });
 
-Route::resource('/task', TaskController::class)->middleware('auth')->except(['show']);
+Route::resource('/task', TaskController::class)->middleware('auth')->except(['show', 'create']);
+
+Route::get('/task/create/{group?}', [TaskController::class, 'create'])->middleware('auth')->name('task.create');
 
 Route::prefix('/task')->name('task.')->middleware('auth')->group(function(){
 
-Route::get('notifiable/{tache}', [TaskController::class, 'setNotifiableColumn'])->name('notifiable');
-Route::get('{id}/finish', [TaskController::class, 'marqueToFinish'])->name('marque.finish');
-Route::get('{id}/begin', [TaskController::class, 'marqueToBegin'])->name('marque.begin');
-Route::get('statistiques', [TaskController::class, 'statistiques'])->name('statistiques');  
+    Route::get('notifiable/{tache}', [TaskController::class, 'setNotifiableColumn'])->name('notifiable');
+    Route::get('{id}/finish', [TaskController::class, 'marqueToFinish'])->name('marque.finish');
+    Route::get('{id}/begin', [TaskController::class, 'marqueToBegin'])->name('marque.begin');
+    Route::get('statistiques', [TaskController::class, 'statistiques'])->name('statistiques');  
 
-Route::get('terminees', [TaskController::class, 'tachesTerminees'])->name('terminees');
-Route::get('en_cours', [TaskController::class, 'tachesEncours'])->name('en_cours');
-Route::get('a_venir', [TaskController::class, 'tachesAVenir'])->name('a_venir');
-Route::get('terminees/retard', [TaskController::class, 'tasksTermineesRetard'])->name('retard');
+
+    Route::get('terminees', [TaskController::class, 'tachesTerminees'])->name('terminees');
+    Route::get('en_cours', [TaskController::class, 'tachesEncours'])->name('en_cours');
+    Route::get('a_venir', [TaskController::class, 'tachesAVenir'])->name('a_venir');
+    Route::get('terminees/retard', [TaskController::class, 'tasksTermineesRetard'])->name('retard');
 
 });
 
 Route::resource('/group', GroupController::class)->middleware('auth');
 
 Route::prefix('/group')->name('group.')->middleware('auth')->group(function(){
+    Route::get('workspace/{group}', [GroupController::class, 'workSpace'])->name('workspace');
 
+    Route::get('invite/{group}/{user}', [GroupController::class, 'inviteUserToJoinGroup'])->name('invite.user');
+    Route::get('accept/invitation/{group}/{user}', [GroupController::class, 'attachUserToGroup'])->name('attach.user');
 
+    Route::get('{group}/{task}/assign', [GroupController::class, 'viewToAssignRolToUser'])->name('view.assign.rol');
+    Route::post('tasks/assign/{task}', [GroupController::class, 'assinRolToUser'])->name('assign.rol');
+    Route::get('tasks/assign/{task}/{user}', [GroupController::class, 'detachUserOnGroupTask'])->name('detach.rol');
 });
 

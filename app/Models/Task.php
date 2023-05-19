@@ -55,4 +55,23 @@ class Task extends Model
 
         return $date1->diffInDays($date2);
     }
+    public function getTaskStatus() 
+    {
+        $status = '';
+        
+        if($this->beginned_at !== null && $this->finished_at !== null)
+        {
+            $status = 'Terminée';
+        }
+        elseif($this->beginned_at == null)
+        {
+            $status = 'Non démarrée';
+        }
+        elseif($this->beginned_at !== null && $this->finished_at == null)
+        {
+            $status = 'En cours';
+        }
+
+        return $status;
+    }
 }

@@ -41,9 +41,10 @@ namespace App\Models{
  * @property int|null $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\User|null $author
+ * @property int $notifiable
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Task> $tasks
  * @property-read int|null $tasks_count
+ * @property-read \App\Models\User|null $user
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
  * @method static \Database\Factories\GroupFactory factory($count = null, $state = [])
@@ -54,6 +55,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Group whereNotifiable($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Group whereUserId($value)
  */
@@ -166,7 +168,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $image
- * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $groupsWhenImAuthor
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Group> $groupsWhenImAuthor
  * @property-read int|null $groups_when_im_author_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Group> $groupsWhenImJoined
  * @property-read int|null $groups_when_im_joined_count

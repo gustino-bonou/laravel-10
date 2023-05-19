@@ -27,7 +27,7 @@ $route = request()->route()->getName();
               </h5>
               <p class="card-text ">{{ Str::substr($group->description, 0, 25) }}</p>
               <div class="d-flex  align-items-center justify-content-md-start ">
-                  <a href="" class=" card-link">Work Space</a>
+                  <a href="{{ route('group.workspace', $group)}}" class=" card-link">Work Space</a>
                   
               </div>
 
@@ -37,6 +37,21 @@ $route = request()->route()->getName();
     @empty
         
     @endforelse
+
+    <div class="row">
+      @foreach($groups as $group)
+        <div class="col-sm-4">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h5 class="card-title">{{ $group->name }}</h5>
+              <p class="card-text">{{ $group->description }}</p>
+              <!-- Autres informations de la tâche -->
+              <a href="#" class="btn btn-primary">Action</a>
+            </div>
+          </div>
+        </div>
+      @endforeach
+    </div>
 
     <div class=" text-center">
         <h5>Aucun groupe</h5>

@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\TaskRequest;
+use App\Models\Group;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -176,11 +177,12 @@ class TaskController extends Controller
      /**
       * Show the form for creating a new resource.
       */
-     public function create()
+     public function create($group = null)
      {
          
-         return view('task..edit', [
-             'tache' => new Task()
+         return view('task.edit', [
+             'tache' => new Task(),
+             'group' => $group,
          ]);
      }
  
@@ -189,6 +191,9 @@ class TaskController extends Controller
       */
      public function store(TaskRequest $request, Task $tache)
      {
+
+
+        
  
          $id = Auth::id();
  
@@ -200,12 +205,26 @@ class TaskController extends Controller
              'beginned_at' => $request->input('beginned_at'),
              'finishes_at' => $request->input('finishes_at'),
              'notifiable' => $request->input('notifiable'),
-             'user_id' => $id
+
          ];
  
-             $tache = Task::create($data);
-             $tache->user()->associate($id);
-             $tache->save();
+         $tache = Task::create($data);
+
+         $tache->user()->associate($id);
+
+         $tache->group()->associate($request->input('group_id'));
+         $tache->level = $request->input('level');
+         
+         $tache->save();
+
+         
+         if($tache->group_id !== null)
+         {
+            return to_route('group.workspace', [
+                'group' => $tache->group_id,
+            ])->with('success', 'Tache créée avec succès');
+         }
+
          return to_route('task.index')->with('success', 'Tache créée avec succès');
      }
  
@@ -219,9 +238,14 @@ class TaskController extends Controller
       */
      public function edit( $tache)
      {
+
+
          $tache = Task::find($tache);
+
+
          return view('task.edit', [
-             'tache' => $tache
+             'tache' => $tache,
+             'group' => $tache->group_id,
          ]);
      }
  
@@ -248,8 +272,17 @@ class TaskController extends Controller
      public function destroy($tache)
      {
          $tache = Task::find($tache);
+
+         $group = $tache->group_id;
  
          $tache->delete();
+
+         if($group !== null)
+         {
+            return to_route('group.workspace', [
+                'group' => $group
+            ]);
+         }
  
          return back()->with('Suppression effectuée avec succès');
      }
