@@ -30,7 +30,7 @@ class AssignedTaskToUserInGroupNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -49,7 +49,9 @@ class AssignedTaskToUserInGroupNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            
+            'task_id' => $this->task->id,
+            'group_id' => $this->group->id,
         ];
     }
 }

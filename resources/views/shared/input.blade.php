@@ -14,7 +14,7 @@
     $holder ??= '';
 @endphp
 
-<div @class(['form-group', $class])>
+<div @class(['form-group m-4', $class])>
     <label for="{{ $name }}"> {{ $label }} </label>
     @if ($type === 'textarea')
     <textarea class="form-control @error($name)

@@ -52,7 +52,7 @@ class User extends Authenticatable
         return $this->belongsToMany(Task::class);
     }
 
-    public function groupsWhenImJoined()
+    public function groupsWhenImJoineds()
     {
         return $this->belongsToMany(Group::class);
     }

@@ -15,13 +15,13 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function home(){
+    public function homeTasks(){
 
         $user = User::find(Auth::id());
  
          
  
-         $taches = $user->tasks()->orderBy('finish_at', 'asc')->limit(6)->get();
+         $taches = $user->tasks()->homeTasks()->get();
  
          return view('task.home', [
  
@@ -66,7 +66,7 @@ class TaskController extends Controller
  
  
  
-         $taches = $user->tasks()->whereNotNull('beginned_at')->whereNull('finished_at')->orderBy('finish_at', 'asc')->paginate(15);
+         $taches = $user->tasks()->tasksEnCours()->paginate(15);
  
          return view('task.en_cours', [
              'taches' => $taches
@@ -81,7 +81,7 @@ class TaskController extends Controller
  
  
  
-         $taches = $user->tasks()->whereNull('beginned_at')->orderBy('begin_at', 'asc')->paginate(15);
+         $taches = $user->tasks()->tasksNonDemarrees()->paginate(15);
  
          return view('task.a_venir', [
              'taches' => $taches
@@ -97,7 +97,7 @@ class TaskController extends Controller
  
  
  
-         $tachesTerminees = $user->tasks()->whereNotNull('finished_at')->orderBy('finished_at', 'asc')->paginate(15);
+         $tachesTerminees = $user->tasks()->tasksTerminees()->paginate(15);
  
          return view('task.terminees', [
  
@@ -263,6 +263,13 @@ class TaskController extends Controller
 
         $task->save();
 
+        if($task->group_id !== null)
+         {
+            return to_route('group.workspace', [
+                'group' => $task->group_id,
+            ])->with('success', 'Tache modifiéee avec succès');
+         }
+
         return to_route('task.index')->with('success', 'Task modified success');
       }
  
@@ -314,7 +321,7 @@ class TaskController extends Controller
      public function tasksTermineesRetard(){
 
         $user = User::find(Auth::id());
-        $tasks = $user->tasks()->whereNotNull('beginned_at')->whereNotNull('finished_at')->whereDate('finished_at', '>', DB::raw('finish_at'))->paginate(15);
+        $tasks = $user->tasks()->tasksTermineesRetard()->paginate(15);
 
         return view('task.terminees_retard', [
             'tasks' => $tasks,

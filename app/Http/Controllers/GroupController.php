@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\SendNotificationToUserConfiedTaskInGroupEvent;
-use App\Http\Requests\AssignRoleToUserRequest;
-use App\Http\Requests\GroupRequest;
-use App\Http\Requests\SearchUserRequest;
-use App\Models\Group;
-use App\Models\Task;
-use App\Models\User;
-use App\Notifications\AssignRoleToUserNotif;
-use App\Notifications\InviteUserToJoinGroupNotification;
 use Auth;
-use Illuminate\Http\Request;
 use Mail;
 use Notification;
+use App\Models\Task;
+use App\Models\User;
+use App\Models\Group;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use PhpParser\Node\Stmt\Return_;
+use App\Http\Requests\GroupRequest;
+use App\Http\Requests\SearchUserRequest;
+use App\Notifications\AssignRoleToUserNotif;
+use App\Http\Requests\AssignRoleToUserRequest;
+use App\Notifications\InviteUserToJoinGroupNotification;
+use App\Notifications\AssignedTaskToUserInGroupNotification;
+use App\Events\SendNotificationToUserConfiedTaskInGroupEvent;
+use DB;
+use Illuminate\Database\Eloquent\Builder;
 
 class GroupController extends Controller
 {
@@ -76,6 +80,8 @@ class GroupController extends Controller
 
         $allUsers = User::paginate(10);
 
+        
+
         return view('group.edit', [
             'group' => $group,
             'allUsers' => $allUsers
@@ -84,18 +90,28 @@ class GroupController extends Controller
     public function workspace(Group $group, SearchUserRequest $request)
     {
 
+        $groupId = $group->id;
 
-        $query = User::query()->orderBy('name');
+
+    
+        //on recupere tous les utilisateurs sans ceux appartenant au groupe en question
+        $users = User::whereDoesntHave('groupsWhenImJoineds', function ($query) use ($groupId) {
+            $query->where('group_id', $groupId);
+        })->orderBy('name');
+
+
+        $homeTasks = $group->tasks()->HomeTasks()->get();
 
         if($request->validated('name'))
         {
-            $query = $query->where('name', 'like', "%{$request->validated('name')}%");
+            $users = $users->where('name', 'like', "%{$request->validated('name')}%");
         }
 
         return view('group.workspace', [
 
             'group' => $group,
-            'allUsers' => $query->paginate(15),
+            'homeTasks' =>$homeTasks,
+            'allUsers' => $users->paginate(10),
             'input' => $request->validated()
         ]); 
         
@@ -153,7 +169,6 @@ class GroupController extends Controller
     public function assinRolToUser($task, AssignRoleToUserRequest $request)
     {
 
-
         $task = Task::findOrFail($task);
 
         $task->users()->syncWithoutDetaching($request->validated('users'));
@@ -162,32 +177,24 @@ class GroupController extends Controller
 
         foreach(array_values($request->validated('users')) as $value)
         {
-
             $user = User::findOrFail($value);
 
-            Notification::route('database', new AssignRoleToUserNotif($group, $user, $task));
+            //notification enrégistrée dans la base de données
 
-            
+           // $user->notify(new AssignRoleToUserNotif($group, $user, $task));
 
-            //Mail::to('')->send(new monMAil)
 
-            //Notification::send([''], new Notification)
-
-            //event(new SendNotificationToUserConfiedTaskInGroupEvent($group, $user, $task));
+            //notification envoyée par mail grace à un event
+            event(new SendNotificationToUserConfiedTaskInGroupEvent($group, $user, $task));
 
         }
-
-        dd('ok');
-
-        
-
-        return to_route('group.workspace', [
-            'group' => $task->group_id
-        ])->with('success', 'Tache bien confiée');
+        return to_route('task.edit', [
+            'task' => $task->id
+        ]);
     }
+
     public function detachUserOnGroupTask($task, $user)
     {
-
 
         $task = Task::findOrFail($task);
 
@@ -195,4 +202,105 @@ class GroupController extends Controller
 
         return back();
     }
+
+
+    public function groupTasks($group)
+     {
+          
+        $group = Group::find($group);
+
+        $tasks = $group->tasks()->orderBy('finish_at', 'asc')->orderBy('created_at', 'asc')->paginate(15);
+ 
+         return view('group.task.index', [
+             'tasks' => $tasks,
+         ]);
+     }
+     public function tachesEncours($group)
+     {
+
+        $group = Group::find($group);
+
+        $tasks = $group->tasks()->tasksEnCours()->paginate(15);
+
+         return view('group.task.en_cours', [
+             'tasks' => $tasks
+         ]);
+     }
+     public function tachesNonDemarrees($group)
+     {
+         /* $date = Carbon::create(now());
+         $date->addDays(30); */
+ 
+         $group = Group::find($group);
+
+        $tasks = $group->tasks()->tasksNonDemarrees()->paginate(15);
+         return view('group.task.a_venir', [
+             'tasks' => $tasks
+         ]);
+     }
+ 
+     public function tachesTerminees($group)
+     {
+    
+        $group = Group::find($group);
+
+        $tasks = $group->tasks()->tasksTerminees()->paginate(15);
+ 
+         return view('group.task.terminees', [
+             'tasks' => $tasks
+         ]);
+     } 
 }
+
+/* 
+Pour mettre en place un système de tag en Laravel, où un utilisateur peut taguer un autre utilisateur sur un commentaire, vous pouvez suivre les étapes suivantes :
+
+Créez une table de pivot pour gérer la relation de tag entre les utilisateurs. Vous pouvez créer une migration pour cela en utilisant la commande artisan suivante :
+bash
+Copy code
+php artisan make:migration create_comment_tag_table --create=comment_tag
+Dans la migration générée, vous pouvez définir les colonnes nécessaires, telles que comment_id, user_id (pour l'utilisateur qui taggue) et tagged_user_id (pour l'utilisateur tagué). Assurez-vous de définir les relations appropriées dans votre modèle Comment et User.
+
+Dans votre modèle Comment, définissez une relation many-to-many pour les utilisateurs tagués :
+php
+Copy code
+public function taggedUsers()
+{
+    return $this->belongsToMany(User::class, 'comment_tag', 'comment_id', 'tagged_user_id');
+}
+Cela permettra de récupérer les utilisateurs tagués pour un commentaire donné.
+
+Dans votre modèle User, définissez une relation many-to-many pour les commentaires tagués par cet utilisateur :
+php
+Copy code
+public function taggedComments()
+{
+    return $this->belongsToMany(Comment::class, 'comment_tag', 'tagged_user_id', 'comment_id');
+}
+Cela permettra de récupérer les commentaires où l'utilisateur est tagué.
+
+Pour ajouter un tag à un commentaire, vous pouvez utiliser la méthode attach() de la relation many-to-many dans votre contrôleur. Par exemple :
+php
+Copy code
+$comment = Comment::find($commentId);
+$taggedUserIds = [1, 2, 3]; // Remplacez par les IDs des utilisateurs tagués
+$comment->taggedUsers()->attach($taggedUserIds);
+Assurez-vous de remplacer $commentId par l'ID réel du commentaire et $taggedUserIds par un tableau contenant les IDs des utilisateurs que vous souhaitez taguer.
+
+Pour récupérer les utilisateurs tagués d'un commentaire donné, vous pouvez utiliser la relation taggedUsers() définie dans le modèle Comment. Par exemple :
+php
+Copy code
+$comment = Comment::find($commentId);
+$taggedUsers = $comment->taggedUsers;
+Cela vous donnera une collection des utilisateurs tagués pour le commentaire spécifié.
+
+De même, pour récupérer les commentaires tagués par un utilisateur donné, vous pouvez utiliser la relation taggedComments() définie dans le modèle User. Par exemple :
+php
+Copy code
+$user = User::find($userId);
+$taggedComments = $user->taggedComments;
+Cela vous donnera une collection des commentaires où l'utilisateur est tagué.
+
+C'est ainsi que vous pouvez mettre en place un système de tag en utilisant des relations many-to-many dans Laravel. Vous pouvez ensuite utiliser ces relations pour afficher les utilisateurs tagués sur les commentaires et pour effectuer d'autres opérations en fonction de vos besoins spécifiques.
+
+*/

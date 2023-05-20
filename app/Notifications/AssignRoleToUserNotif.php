@@ -35,6 +35,7 @@ class AssignRoleToUserNotif extends Notification
     /**
      * Get the mail representation of the notification.
      */
+    
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
@@ -48,13 +49,13 @@ class AssignRoleToUserNotif extends Notification
      *
      * @return array<string, mixed>
      */
+    
+   
     public function toArray(object $notifiable): array
     {
         return [ 
-            'user_id' => $this->user->id,
             'task_id' => $this->task->id,
             'group_id' => $this->group->id,
-            'group_name' => $this->group->name,
         ];
     }
 }

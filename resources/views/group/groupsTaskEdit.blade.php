@@ -1,8 +1,12 @@
 @if ($tache->group_id !== null)
 
-   <div class="mb-3">
-    Cette tache est confiée aux utilisateurs suivants:
-   </div>
+
+<div class="d-flex gap-2 w-100  justify-content-between align-content-between card-footer  mb-3"> 
+
+    <h4>Cette tache est confiée aux utilisateurs suivants:</h4>
+    <a href="{{ route('group.view.assign.rol', ['group' => $tache->group_id, 'task' => $tache->id]) }}" class="btn btn-secondary">Ajouter d'utilisateur</a>
+  
+</div>
 
     <div class="mb-5">
         <table class="table table.striped">

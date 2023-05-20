@@ -25,7 +25,7 @@ class TaskRequest extends FormRequest
             'name' => ['required','string', 'min:5'],
             'description' => ['required','string', 'min:5'],
             'level' => ['required', 'string'],
-            'begin_at' => ['date', 'required', ],
+            'begin_at' => ['date', 'required', 'after:date'],
             'finish_at' => ['date', 'required', 'after:begin_at'],
             'beginned_at' => ['date', 'nullable'],
             'finished_at' => ['date','after:beginned_at', 'nullable'],

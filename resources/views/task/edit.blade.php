@@ -43,42 +43,36 @@
                     'label' => 'Date fin',
                     'value' => $tache->finish_at,
             ])
-            
-            @include('shared.input', [
-                    'name' => 'group_id',
-                    'label' => '',
-                    'type' => 'hidden',
-                    'value' => $group,
-            ])
-    
+
+            <input type="hidden" name="group_id" value="{{$group}}">
             
             <div>
-                <div class="form-group form-check-inline">
-                    <label for="" class="mr-5">Recevoir de notification pour cette tache</label>
+                <div class="form-group form-check-inline m-4">
+                    <label for="" class="">Recevoir de notification pour cette tache</label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="notifiable" id="oui" value={{1}} @checked($tache->notifiable == true) @checked($tache->id == null)>
+                        <input class="form-check-input" type="radio" name="notifiable" id="oui" value={{1}} @checked($tache->notifiable === 1) @checked($tache->id === null)>
                         <label class="form-check-label" for="oui">Oui</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="notifiable" id="non" value={{0}} @checked($tache->notifiable == false)>
+                        <input class="form-check-input" type="radio" name="notifiable" id="non" value={{0}} @checked($tache->notifiable === 0)>
                         <label class="form-check-label" for="non">Non</label>
                     </div>
                 </div>
             </div>
             <div>
-                <div class="form-group form-check-inline">
-                    <label for="" class="mr-5">Niveau</label>
+                <div class="form-group form-check-inline m-4">
+                    <label for="" class="">Niveau</label>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="level" id="immediate" value="high" @checked($tache->level == 'high')>
-                        <label class="form-check-label" for="immediate">Urgent</label>
+                        <label class="form-check-label" for="immediate">High</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="level" id="important" value="medium" @checked($tache->level == 'medium') @checked($tache->id == null)>
-                        <label class="form-check-label" for="important">Important</label>
+                        <label class="form-check-label" for="important">Medium</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="level" id="lower" value="low" @checked($tache->level == 'low')>
-                        <label class="form-check-label" for="lower">Pas urgent</label>
+                        <label class="form-check-label" for="lower">Low</label>
                     </div>
                 </div>
             </div>
@@ -94,7 +88,7 @@
                         'value' => $tache->beginned_at,
                         ])
                     @else
-                    <h4>Text non démarrée</h4>
+                    <h4 class="m-4">Text non démarrée</h4>
                         @include('shared.input', [
                         'name' => 'beginned_at',
                         'type' => 'hidden',
@@ -120,25 +114,24 @@
                 @endif
             </div>
     
-            @include('group.groupsTaskEdit')
-    
-    
-    
-            <div class="row justify-content-between align-content-between">
-                <div class="col"><a href="" class=" btn btn-danger btn-sm">Supprimer</a></div>
-                <div class="col  ">
-                    <button class="btn btn-primary mb-5 ">
-    
-                        @if ($tache->id == null )
-                            Créer
-                        @else
-                            Modifier
-                        @endif
-    
-                    </button>
-                </div>
-                
+            <div class=" m-4">
+                @include('group.groupsTaskEdit')
             </div>
+    
+    
+    
+                    <div class="row">
+                        <button class="btn btn-primary m-4">
+    
+                            @if ($tache->id == null )
+                                Créer
+                            @else
+                                Modifier
+                            @endif
+        
+                        </button>
+                    </div>
+                
                 
         </form>
     

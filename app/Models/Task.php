@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Group;
+use DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Task extends Model
@@ -73,5 +75,26 @@ class Task extends Model
         }
 
         return $status;
+    }
+
+    public function scopeTasksEnCours(Builder $builder)
+    {
+        return $builder->whereNotNull('beginned_at')->whereNull('finished_at')->orderBy('finish_at', 'asc');
+    }
+    public function scopeTasksNonDemarrees(Builder $builder)
+    {
+        return $builder->whereNull('beginned_at')->whereDate('begin_at', '>=' , now())->orderBy('begin_at', 'asc');
+    }
+    public function scopeTasksTerminees(Builder $builder)
+    {
+        return $builder->whereNotNull('beginned_at')->whereNotNull('finished_at')->orderBy('finished_at', 'asc');
+    }
+    public function scopeTasksTermineesRetard(Builder $builder)
+    {
+        return $builder->whereNotNull('beginned_at')->whereNotNull('finished_at')->whereDate('finished_at', '>', DB::raw('finish_at'));
+    }
+    public function scopeHomeTasks(Builder $builder)
+    {
+        return $builder->whereNull('finished_at')->whereDate('finish_at', '<=', Carbon::now()->addDays(20))->orderBy('finish_at', 'asc')->limit(6);
     }
 }

@@ -17,9 +17,11 @@ use App\Http\Controllers\TaskController;
 |
 */
 
-Route::get('/', function () {
+/* Route::get('/', function () {
     return view('welcome');
-});
+}); */
+
+Route::get('/', [TaskController::class, 'homeTasks'])->middleware('auth')->name('home');
 
 Route::get('/login', [AuthController::class, 'formLogin'])->name('auth.formLogin');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
@@ -77,5 +79,10 @@ Route::prefix('/group')->name('group.')->middleware('auth')->group(function(){
     Route::get('{group}/{task}/assign', [GroupController::class, 'viewToAssignRolToUser'])->name('view.assign.rol');
     Route::post('tasks/assign/{task}', [GroupController::class, 'assinRolToUser'])->name('assign.rol');
     Route::get('tasks/assign/{task}/{user}', [GroupController::class, 'detachUserOnGroupTask'])->name('detach.rol');
+
+    Route::get('{group}/tasks', [GroupController::class, 'groupTasks'])->name('tasks.index');
+    Route::get('{group}/tasks_non_demarrees', [GroupController::class, 'tachesNonDemarrees'])->name('tasks.non.demarrees');
+    Route::get('{group}/tasks_en_cours', [GroupController::class, 'tachesEnCours'])->name('tasks.en.cours');
+    Route::get('{group}/tasks_terminees', [GroupController::class, 'tachesTerminees'])->name('tasks.terminees');
 });
 

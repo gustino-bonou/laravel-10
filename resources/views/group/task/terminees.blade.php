@@ -1,14 +1,14 @@
 @extends('base')
 
 @section('title')
-    Taches terminées avec retdar
+    Taches terminées
     
 @endsection
 
 @section('content')
 
 <div class=" text-center my-5">
-    <h3 class="text-info">@yield('title')</h3>
+    <h3 class="text-info">Vos taches terminées</h3>
 </div>
 
 
@@ -16,10 +16,9 @@
     <thead>
         <tr>
             <th>Tache</th>
-            <th>Devait terminer le  </th>
+            <th>Démarrée le  </th>
             <th>Terminée le</th>
             <th>Niveau</th>
-            <th>Retard(Jours)</th>
             <th class="text-end">Actions</th>
 
         </tr>
@@ -30,17 +29,11 @@
             <tr>
                 
                 <td>{{ $task->name }}</td>
-                <td>{{ $task->getDate($task->finish_at) }}</td>
+                <td>{{ $task->getDate($task->beginned_at) }}</td>
                 <td>{{ $task->getDate($task->finished_at) }}</td>
                 <td class="font-weight-bold @if($task->level == 'low') text-secondary  @elseif($task->level == 'high') text-danger @elseif($task->level == 'medium') text-warning @endif">
-                    {{ Str::ucfirst($task->level) }}
-                </td>
-                <td class="font-weight-bold">
-                    {{ $task->getDiffInDates($task->finished_at, $task->finish_at) }}</td>
-                </td>
-
+                    {{ Str::ucfirst($task->level) }}</td>
                 <td>
-
                     <div class="d-flex gap-2 w-100 justify-content-end">
                         {{-- Pour vérifier si l'utilisateur a le droit avant d'afficher le bouton --}}
 
