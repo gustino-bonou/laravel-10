@@ -52,6 +52,11 @@
             text-dark
             @endif">Taches terminées avec retard</a>
             </li>
+            <li class="nav-item mb-3">
+                <a href="{{ route('group.im.member') }}" class="@if ($route == 'task.retard')
+            text-dark
+            @endif">Les groupes dont je suis membre</a>
+            </li>
           </ul>
         </div>
       </div>

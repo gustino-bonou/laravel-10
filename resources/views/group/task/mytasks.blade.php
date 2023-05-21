@@ -13,7 +13,7 @@ $route = request()->route()->getName();
 ?>
 
 <div class=" text-center my-5">
-    <h3 class="text-info">{{$group->name }}  Les taches</h3>
+    <h3 class="text-info">{{$group->name }}:  Mes taches</h3>
 </div>
 
 <table class="table table.striped">
@@ -29,7 +29,7 @@ $route = request()->route()->getName();
         </tr>
     </thead>
     <tbody>
-        @forelse ($tasks as $task)
+        @forelse ($myTasks as $task)
             <tr>
                 
                 <td>{{ $task->name }}</td>
@@ -65,7 +65,6 @@ $route = request()->route()->getName();
 
 
 <div>
-    {{ $tasks->links() }}
 </div>
 
 

@@ -1,71 +1,47 @@
+
 @extends('base')
 
-@section('title', "S'inscrire")
-
+@section('title', 'S\'inscrire')
 
 @section('content')
 
+    <div class="text-center mt-4">
+        <h3 class="mb-20 mt-lg-n1 text-info">@yield('title')</h3>
+    </div>
+
+    <form class="vstack gap-3" action="{{ route('auth.doRegister') }}" method="post" enctype="multipart/form-data">
+
+        @csrf
+        @method('post')
+
+        @include('shared.input', [
+            'name' => 'name',
+            'holder' => 'Votre nom',
+        ])
     
-
-<form action="" method="post">
-
-@csrf
-
-
-<div class="form-group">
-
-<label for="name"> Votre nom</label>
-
-<input type="text" name="name" id= "name" class="form-control" value="{{ old('name') }}">
-
-@error('name')
-    {{ $message }} 
-@enderror
+        @include('shared.input', [
+            'name' => 'email',
+            'holder' => 'Votre adresse email',
+        ])
     
-</div>
+        @include('shared.input', [
+                'name' => 'password',
+                'label' => 'Mot de passe',
+                'type' => 'password',
+        ])
+        @include('shared.input', [
+                'name' => 'password_confirmation',
+                'label' => 'Confirmer votre mot de passe',
+                'type' => 'password',
+        ])
 
-<div class = form-group> 
+        <button class="btn btn-primary mb-5">
 
-<label for="category">Votre email</label>
-
-    <input type="email" id= "email" class="form-control"  name="email" value="{{ old('email') }}">
-    
-    @error('email')
-    
-    {{ $message }}
-    
-    @enderror
-
-</div>
-
-
-<div class="form-group">
-
-
-    <label for="password">Mot de passe</label>
-    <input type="password" name="password" id= "password" class="form-control">    
-
-    @error('password')
-        {{ $message }} 
-    @enderror
-        
-</div>
-<div class="form-group">
-
-
-    <label for="password2">Confirmer Mot de passe</label>
-    <input type="password2" name="password2" id= "password2" class="form-control">    
-
-    @error('password')
-        {{ $message }} 
-    @enderror
-        
-</div>
-
-
-
-<button class="btn btn-primary">S'inscrire</button>
-
-</form>
+            S'inscrire
+            
+        </button>       
+    </form>
 
 @endsection
+
+

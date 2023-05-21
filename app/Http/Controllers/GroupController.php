@@ -23,12 +23,17 @@ use Illuminate\Database\Eloquent\Builder;
 
 class GroupController extends Controller
 {
+
+    public function __construct()
+    {
+       
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        
+
         $user = User::find(Auth::id());
 
         $groups = $user->groupsWhenImAuthor()->paginate(8);
@@ -80,8 +85,6 @@ class GroupController extends Controller
 
         $allUsers = User::paginate(10);
 
-        
-
         return view('group.edit', [
             'group' => $group,
             'allUsers' => $allUsers
@@ -89,18 +92,17 @@ class GroupController extends Controller
     }
     public function workspace(Group $group, SearchUserRequest $request)
     {
+        //dd(Auth::user()->can('inviteUserToJoinGroup', [$group]));
+        //dd(Auth::user()->can('workspace', [$group]));
 
         $groupId = $group->id;
 
-
-    
         //on recupere tous les utilisateurs sans ceux appartenant au groupe en question
         $users = User::whereDoesntHave('groupsWhenImJoineds', function ($query) use ($groupId) {
             $query->where('group_id', $groupId);
         })->orderBy('name');
 
-
-        $homeTasks = $group->tasks()->HomeTasks()->get();
+        $homeTasks = $group->tasks()->homeTasks()->get();
 
         if($request->validated('name'))
         {
@@ -142,6 +144,7 @@ class GroupController extends Controller
 
         return back();
     }
+
     public function attachUserToGroup($group, $user)
     {
         $group = Group::findOrFail($group);
@@ -153,6 +156,19 @@ class GroupController extends Controller
             'group' =>$group->id
         ])->with('success', 'Vous faites desormais partie de ce groupe');
     }
+
+    public function detachUserOnGroup($group, $user)
+    {
+        $group = Group::findOrFail($group);
+        $user = User::findOrFail($user);
+
+        $group->users()->detach($user);
+
+        return to_route('group.workspace', [
+            'group' =>$group->id
+        ])->with('success', 'Vous faites desormais partie de ce groupe');
+    }
+
     public function viewToAssignRolToUser($group, $task)
     {
         $task = Task::findOrFail($task);
@@ -166,6 +182,7 @@ class GroupController extends Controller
             'users' =>$users,
         ]);
     }
+
     public function assinRolToUser($task, AssignRoleToUserRequest $request)
     {
 
@@ -193,6 +210,7 @@ class GroupController extends Controller
         ]);
     }
 
+
     public function detachUserOnGroupTask($task, $user)
     {
 
@@ -213,17 +231,20 @@ class GroupController extends Controller
  
          return view('group.task.index', [
              'tasks' => $tasks,
+             'group' => $group
          ]);
      }
+
      public function tachesEncours($group)
      {
 
-        $group = Group::find($group);
+        $group = Group::findOrFail($group);
 
         $tasks = $group->tasks()->tasksEnCours()->paginate(15);
 
          return view('group.task.en_cours', [
-             'tasks' => $tasks
+             'tasks' => $tasks,
+             'group' => $group
          ]);
      }
      public function tachesNonDemarrees($group)
@@ -231,24 +252,56 @@ class GroupController extends Controller
          /* $date = Carbon::create(now());
          $date->addDays(30); */
  
-         $group = Group::find($group);
+         $group = Group::findOrFail($group);
 
         $tasks = $group->tasks()->tasksNonDemarrees()->paginate(15);
          return view('group.task.a_venir', [
-             'tasks' => $tasks
+             'tasks' => $tasks,
+             'group' => $group
          ]);
      }
  
      public function tachesTerminees($group)
      {
     
-        $group = Group::find($group);
+        $group = Group::findOrFail($group);
 
         $tasks = $group->tasks()->tasksTerminees()->paginate(15);
  
          return view('group.task.terminees', [
-             'tasks' => $tasks
+             'tasks' => $tasks,
+             'group' => $group
          ]);
+     } 
+     public function myTasksInTheGroup($group)
+     {
+    
+        $group = Group::findOrFail($group);
+
+
+        //ici on recupere les tasks qui sont impliquées dans une relation belongToMany
+        //et qui dans ces relations(la table "task_user"), le user_id est egale à l'id de Auth
+        //Par la suite on filtre ces taches en recuperant celle dont le group_id est égale au group dourni en argument
+        $tasks = Task::whereHas('users', function($query) {
+            $query->where('user_id', Auth::id());
+        })->where('group_id', $group->id)->get();
+ 
+        return view('group.task.myTasks', [
+            'myTasks' => $tasks,
+            'group' => $group
+        ]);
+     } 
+     public function groupsWhenImMember()
+     {
+    
+        $groups = Group::whereHas('users', function($query) {
+            $query->where('user_id', Auth::id());
+        })->get();
+
+        return view('group.groups_im_member', [
+            'groups' => $groups
+        ]);
+      
      } 
 }
 

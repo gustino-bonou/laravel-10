@@ -8,7 +8,7 @@
 @section('content')
 
 <div class=" text-center my-5">
-    <h3 class="text-info">@yield('title')</h3>
+    <h3 class="text-info">{{$group->name }} Taches terminées en retard</h3>
 </div>
 
 
@@ -57,8 +57,8 @@
                 </td>
             </tr>
         @empty
-        <div>
-            
+        <div class="text-center m-5">
+            Aucune tache terminée avec retard pour le moment. Félicitation !
         </div>
         @endforelse
 

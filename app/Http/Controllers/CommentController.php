@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentRequest;
 use App\Models\Comment;
+use App\Models\Group;
+use App\Models\Task;
+use App\Models\User;
+use Auth;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -26,9 +31,19 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CommentRequest $request, $group, $task)
     {
-        //
+        $comment = Comment::create($request->validated());
+
+        $comment->user()->associate(User::findOrFail(Auth::id()));
+
+        $comment->task()->associate(Task::findOrFail($task));
+
+        $comment->group()->associate(Group::findOrFail($group));
+
+        $comment->save();
+
+        return back();
     }
 
     /**

@@ -8,7 +8,7 @@
 @section('content')
 
 <div class=" text-center my-5">
-    <h3 class="text-info">Vos taches terminées</h3>
+    <h3 class="text-info">{{$group->name }}Taches terminées</h3>
 </div>
 
 
@@ -50,8 +50,8 @@
                 </td>
             </tr>
         @empty
-        <div>
-            
+        <div class="text-center m-5">
+            Aucune tache terminée pour le moment.
         </div>
         @endforelse
 

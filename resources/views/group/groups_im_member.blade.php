@@ -1,7 +1,7 @@
 @extends('base')
 
 @section('title')
-    Mes groupes
+    Les groupes dont je suis membre
 @endsection
 
 @section('content')
@@ -14,7 +14,6 @@ $route = request()->route()->getName();
     <a href="{{ route('group.create') }}">Créer un groupe</a>
     <h3 class="my-5 mt-lg-n1 text-info">@yield('title')</h3>
 
-    
 
 <div>
     <div class="row">
@@ -35,7 +34,7 @@ $route = request()->route()->getName();
       @empty
         
       <div class=" text-center">
-        <h5>Vous n'avez créé aucun groupe</h5>
+        <h5>Vous faites parties d'aucun groupe</h5>
     </div>
   
       @endforelse

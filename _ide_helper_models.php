@@ -33,6 +33,31 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Comment
+ *
+ * @property int $id
+ * @property string $content
+ * @property int|null $user_id
+ * @property int|null $task_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Task|null $task
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereTaskId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereUserId($value)
+ */
+	class Comment extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Group
  *
  * @property int $id
@@ -130,14 +155,20 @@ namespace App\Models{
  * @property int|null $group_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Comment|null $comments
  * @property-read \App\Models\Group|null $group
  * @property-read \App\Models\User|null $user
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
  * @method static \Database\Factories\TaskFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|Task homeTasks()
  * @method static \Illuminate\Database\Eloquent\Builder|Task newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Task newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Task query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Task tasksEnCours()
+ * @method static \Illuminate\Database\Eloquent\Builder|Task tasksNonDemarrees()
+ * @method static \Illuminate\Database\Eloquent\Builder|Task tasksTerminees()
+ * @method static \Illuminate\Database\Eloquent\Builder|Task tasksTermineesRetard()
  * @method static \Illuminate\Database\Eloquent\Builder|Task whereBeginAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Task whereBeginnedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Task whereCreatedAt($value)
@@ -168,10 +199,12 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $image
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Comment> $comments
+ * @property-read int|null $comments_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Group> $groupsWhenImAuthor
  * @property-read int|null $groups_when_im_author_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Group> $groupsWhenImJoined
- * @property-read int|null $groups_when_im_joined_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Group> $groupsWhenImJoineds
+ * @property-read int|null $groups_when_im_joineds_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Task> $roles

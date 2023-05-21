@@ -38,6 +38,9 @@ class Task extends Model
     public function group(){
         return $this->belongsTo(Group::class);
     }
+    public function comments(){
+        return $this->belongsTo(Comment::class);
+    }
 
     public function getDate(string $date){
         
@@ -83,7 +86,7 @@ class Task extends Model
     }
     public function scopeTasksNonDemarrees(Builder $builder)
     {
-        return $builder->whereNull('beginned_at')->whereDate('begin_at', '>=' , now())->orderBy('begin_at', 'asc');
+        return $builder->whereNull('beginned_at')->orderBy('begin_at', 'asc');
     }
     public function scopeTasksTerminees(Builder $builder)
     {

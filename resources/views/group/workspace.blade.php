@@ -59,6 +59,10 @@
 
 @section('content')
 
+<?php 
+$authId = Auth::user()->id; 
+?>
+
 
 
 <div class="m-4">
@@ -69,18 +73,27 @@
         <div class="text-center mb-5">
             <div class="d-flex gap-2 w-100  justify-content-between align-content-between mb-3">
                 <h5>Cest taches sont celles à écheances les plus proches</h5>
+                <a href="{{ route('group.my.tasks', ['group' => $group->id])}}" class=""> Mes taches dans ce groupe </a>
                 <a href="{{ route('task.create', ['group' => $group->id]) }}" class=""> Créer une tache </a>
             </div>
             
             <div class="row">
                 @forelse ($homeTasks as $task)
+                @can('view', $task)
                 <div class="col-sm-4">
                     <div class="card mb-3">
                       <div class="card-body">
                         <h5 class="card-title">Deadline: {{ $task->getDate($task->finish_at) }}</h5>
                         <p class="card-text">{{ $task->name }}</p>
                         <p class="card-text">{{ $task->description }}</p>
-                        <p class="card-text">Démarrage: {{ $task->getDate($task->begin_at) }}</p>
+                        <div class="d-flex gap-2 w-100  justify-content-between align-content-between ">    
+                            
+                            <p class="card-text">Démarrage: {{ $task->getDate($task->begin_at) }}</p>
+                            
+                            <p>{{$task->getTaskStatus()}}</p>
+                                
+                        </div>
+                        
                         <!-- Autres informations de la tâche -->
                         <div class="d-flex gap-2 w-100  justify-content-between align-content-between card-footer">                
                             <a href="{{ route('task.edit', ['group' => $group, 'task' => $task]) }}" class="btn btn-primary btn-sm">Détails</a>
@@ -94,6 +107,7 @@
                       </div>
                     </div>
                 </div>
+                @endcan
                 @empty
                     <div class="container my-5">
                         <p>Hoppp ! Vous n'estes pas sous pression. Ajouter une tache  
@@ -122,19 +136,17 @@
                         <tr>
                             @forelse ($group->users as $user)
                             <td>{{ $user->name}}</td>
-                            <td>{{ $user->email}}</td>  
-                            <td>
-                                <div class="d-flex gap-2 w-100 justify-content-end">                
-            
-                                      <form action="" method="post">
-                                            @csrf
-                                            @method('delete')
-                                            <button class="btn  btn-warning">Retirer</button>
-                                     </form>
-            
-                                        
-                                </div>
-                            </td>
+                            <td>{{ $user->email}}</td> 
+                            @can('detachUserOnGroup', $group)
+                                <td>
+                                    <div class="d-flex gap-2 w-100 justify-content-end">
+                                        @if ($user->id !== $group->user_id)
+                                            <a href="{{ route('group.detach.user', ['group' => $group, 'user' => $authId ])}}" class="btn  btn-warning btn-sm">Retirer</a>
+                                        @endif
+                                    </div>
+                                </td>  
+                            @endcan 
+                            
                         </tr>
                             
                         @empty
@@ -143,14 +155,22 @@
                     </tbody>
                 </table>
             </div>
+            @if ($group->user_id !== $authId)
+            <div class="text-end m-3">
+                <a href="{{ route('group.detach.user', ['group' => $group, 'user' => $authId ])}}" class="btn  btn-warning btn-sm">Quiter ce groupe</a>
+            </div>
+            @endif
+
         </div>
+
+        @can('inviteUserToJoinGroup', $group)
         <div class="mb-5">
 
             <p class="text-start">
                 Rechercehr d'utilisateur pour en ajouter
             </p>
     
-            <form action="" method="get" class="container d-flex gap-2">
+            <form action="" method="get" class="d-flex gap-2 ">
                 <input type="text" placeholder="Search users" name="name" class="form-control" value="{{ $input['name'] ?? ''}}">
                 <button class="btn btn-primary flex-grow-0">
                     Rechercher
@@ -172,11 +192,8 @@
     
                             <td>
                                 <div class="d-flex gap-2 w-100 justify-content-end">
-                                    @if ($group->users->contains($user))
-                                        <h5 class="btn btn-success btn-sm">Membre</h4>
-                                    @else
+                                    
                                         <a href="{{ route('group.invite.user', ['group' => $group->id, 'user' => $user->id])}}" class=" btn btn-secondary btn-sm">Inviter  </a>
-                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -187,11 +204,14 @@
                     </tbody>
                 </table>
 
-                {{ $allUsers->links() }}
+                
             
             </div>
+            {{ $allUsers->links() }}
         
         </div>
+        @endcan
+
     </div>
    
 </div>

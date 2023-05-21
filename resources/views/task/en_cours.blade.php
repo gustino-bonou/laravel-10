@@ -42,11 +42,7 @@
                                 @method('delete')
                                 <button class="btn btn-danger m-1 btn-sm">Supprimer</button>
                             </form>
-                          <form action="{{ route('task.marque.finish', $tache->id) }}" method="post">
-                                @csrf
-                                @method('put')
-                                <button class="btn btn-success m-1 btn-sm">MCT</button>
-                            </form>
+                            <a href="{{ route('task.marque.finish', $tache->id) }}" class="btn btn-success m-1 btn-sm">MCT</a>
                             
                     </div>
                 </td>

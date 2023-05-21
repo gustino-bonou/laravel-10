@@ -28,7 +28,7 @@ class TaskRequest extends FormRequest
             'begin_at' => ['date', 'required', 'after:date'],
             'finish_at' => ['date', 'required', 'after:begin_at'],
             'beginned_at' => ['date', 'nullable'],
-            'finished_at' => ['date','after:beginned_at', 'nullable'],
+            'finished_at' => ['date', 'nullable'],
             'notifiable' => ['required', 'boolean'],
             'group_id' => ['exists:groups,id', 'nullable'],
         ];

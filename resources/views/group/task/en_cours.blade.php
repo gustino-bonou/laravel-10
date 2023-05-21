@@ -10,7 +10,8 @@
 <div class=" text-center my-5">
     <h3 class="text-info">Vos taches en cours</h3>
 </div>
-
+<div class="m-5">
+    
 <table class="table table.striped">
     <thead>
         <tr>
@@ -31,7 +32,7 @@
                 <td>{{ $task->name }}</td>
                 <td>{{$task->getDate($task->begin_at)}}</td>
                 <td>{{ $task->getDate($task->finish_at) }}</td>
-                <td class="font-weight-bold @if($task->level == 'low') text-secondary  @elseif($task->level == 'high') text-danger @elseif($tache->level == 'medium') text-warning @endif">{{ Str::ucfirst($tache->level) }}</td>
+                <td class="font-weight-bold @if($task->level == 'low') text-secondary  @elseif($task->level == 'high') text-danger @elseif($task->level == 'medium') text-warning @endif">{{ Str::ucfirst($task->level) }}</td>
                 <td>
                     <div class="d-flex gap-2 w-100 justify-content-end">
                         <a href="{{ route('task.edit', ['task' => $task->id ]) }}" class="btn btn-primary m-1 btn-sm">Editer</a>
@@ -42,23 +43,20 @@
                                 @method('delete')
                                 <button class="btn btn-danger m-1 btn-sm">Supprimer</button>
                             </form>
-                          <form action="{{ route('task.marque.finish', $task->id) }}" method="post">
-                                @csrf
-                                @method('put')
-                                <button class="btn btn-success m-1 btn-sm">MCT</button>
-                            </form>
+                            <a href="{{ route('task.marque.finish', $task->id) }}" class="btn btn-success m-1 btn-sm">MCT</a>
                             
                     </div>
                 </td>
             </tr>
         @empty
-        <div>
-            
+        <div class="text-center m-5">
+            Aucune tache démarrée pour le moment. Vérifiez vos taches, vous avez peut etre oublié de les marquer comme terminées
         </div>
         @endforelse
 
     </tbody>
 </table>
+</div>
 
 {{ $tasks->links() }}
     

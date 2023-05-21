@@ -42,11 +42,7 @@
                                     @method('delete')
                                     <button class="btn btn-danger m-1 btn-sm">Supprimer</button>
                             </form>
-                            <form action="{{ route('task.marque.begin', $task->id) }}" method="post">
-                                @csrf
-                                @method('put')
-                                <button class="btn  btn-info m-1 btn-sm">Demarrer</button>
-                            </form>
+                            <a href="{{ route('task.marque.begin', $task->id) }}" class="btn  btn-info m-1 btn-sm">Démarrer</a>
                           
                     </div>
                 </td>

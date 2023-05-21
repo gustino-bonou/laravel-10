@@ -43,11 +43,11 @@ $route = request()->route()->getName();
                         
                         {{-- Pour vérifier si l'utilisateur a le droit avant d'afficher le bouton --}}
 
-                          <form action="{{ route('task.destroy', $tache->id) }}" method="post">
-                                @csrf
-                                @method('delete')
-                                <button class="btn btn-danger m-1 btn-sm">Supprimer</button>
-                            </form>
+                        <form action="{{ route('task.destroy', $tache->id) }}" method="post">
+                            @csrf
+                            @method('delete')
+                            <button class="btn btn-danger m-1 btn-sm">Supprimer</button>
+                        </form>
 
                             
                     </div>

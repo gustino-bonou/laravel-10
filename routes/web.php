@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\TaskController;
 
@@ -26,8 +27,8 @@ Route::get('/', [TaskController::class, 'homeTasks'])->middleware('auth')->name(
 Route::get('/login', [AuthController::class, 'formLogin'])->name('auth.formLogin');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::delete('/logout', [AuthController::class, 'logout'])->name('auth.logout');
-Route::get('/register', [AuthController::class, 'formRegister'])->name('auth.register');
-Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
+Route::get('/register', [AuthController::class, 'register'])->name('auth.register');
+Route::post('/register', [AuthController::class, 'doRegister'])->name('auth.doRegister');
 
 
 Route::prefix('/blog')->name('blog.')->controller(BlogController::class)->group(function(){
@@ -75,14 +76,21 @@ Route::prefix('/group')->name('group.')->middleware('auth')->group(function(){
 
     Route::get('invite/{group}/{user}', [GroupController::class, 'inviteUserToJoinGroup'])->name('invite.user');
     Route::get('accept/invitation/{group}/{user}', [GroupController::class, 'attachUserToGroup'])->name('attach.user');
+    Route::get('detach/user/{group}/{user}', [GroupController::class, 'detachUserOnGroup'])->name('detach.user');
 
     Route::get('{group}/{task}/assign', [GroupController::class, 'viewToAssignRolToUser'])->name('view.assign.rol');
     Route::post('tasks/assign/{task}', [GroupController::class, 'assinRolToUser'])->name('assign.rol');
     Route::get('tasks/assign/{task}/{user}', [GroupController::class, 'detachUserOnGroupTask'])->name('detach.rol');
+ 
 
     Route::get('{group}/tasks', [GroupController::class, 'groupTasks'])->name('tasks.index');
     Route::get('{group}/tasks_non_demarrees', [GroupController::class, 'tachesNonDemarrees'])->name('tasks.non.demarrees');
     Route::get('{group}/tasks_en_cours', [GroupController::class, 'tachesEnCours'])->name('tasks.en.cours');
     Route::get('{group}/tasks_terminees', [GroupController::class, 'tachesTerminees'])->name('tasks.terminees');
+    Route::get('{group}/tasks/user', [GroupController::class, 'myTasksInTheGroup'])->name('my.tasks');
+    Route::get('explore/communities', [GroupController::class, 'groupsWhenImMember'])->name('im.member');
+
+
+    Route::post('{group}/{task}/comment', [CommentController::class, 'store'])->name('task.comment.store');
 });
 

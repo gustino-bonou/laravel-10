@@ -21,7 +21,7 @@ class TaskController extends Controller
  
          
  
-         $taches = $user->tasks()->homeTasks()->get();
+         $taches = $user->tasks()->homeTasks()->where('group_id', '=', null)->get();
  
          return view('task.home', [
  
@@ -40,17 +40,7 @@ class TaskController extends Controller
          
         $user = User::find(Auth::id());
 
-        $tasks = Task::all();
-
-        foreach($tasks as $task)
-        {
-            $task->user_id = Auth::id();
-            $task->save();
-        }
-
-         $taches = $user->tasks()->orderBy('finish_at', 'asc')->orderBy('created_at', 'asc')->paginate(15);
- 
-         
+         $taches = $user->tasks()->where('group_id', '=', null) ->orderBy('finish_at', 'asc')->orderBy('created_at', 'asc')->paginate(15);
  
          return view('task.index', [
              'taches' => $taches,
@@ -59,14 +49,13 @@ class TaskController extends Controller
      }
      public function tachesEncours()
      {
-         /* $date = Carbon::create(now());
-         $date->addDays(30); */
+
  
          $user = User::find(Auth::id());
  
  
  
-         $taches = $user->tasks()->tasksEnCours()->paginate(15);
+         $taches = $user->tasks()->where('group_id', '=', null) ->tasksEnCours()->paginate(15);
  
          return view('task.en_cours', [
              'taches' => $taches
@@ -81,7 +70,7 @@ class TaskController extends Controller
  
  
  
-         $taches = $user->tasks()->tasksNonDemarrees()->paginate(15);
+         $taches = $user->tasks()->where('group_id', '=', null)->tasksNonDemarrees()->paginate(15);
  
          return view('task.a_venir', [
              'taches' => $taches
@@ -90,14 +79,13 @@ class TaskController extends Controller
  
      public function tachesTerminees()
      {
-         /* $date = Carbon::create(now());
-         $date->addDays(30); */
+
  
          $user = User::find(Auth::id());
  
  
  
-         $tachesTerminees = $user->tasks()->tasksTerminees()->paginate(15);
+         $tachesTerminees = $user->tasks()->where('group_id', '=', null) ->tasksTerminees()->paginate(15);
  
          return view('task.terminees', [
  
@@ -118,7 +106,7 @@ class TaskController extends Controller
  
          $task->save();
  
-         return to_route('task.index')->with('success', 'Tache: '.$task->name . ' marquée comme terminée');
+         return back();
      }
      public function marqueToBegin  ($id)
      {
@@ -134,7 +122,7 @@ class TaskController extends Controller
  
          $task->save();
  
-         return to_route('task.index')->with('success', 'Tache: '.$task->name . ' démarrée');
+         return back();
      }
 
  
@@ -143,15 +131,15 @@ class TaskController extends Controller
  
          $user = User::find(Auth::id());
  
-         $nbrTotalTaches = $user->tasks()->count();
+         $nbrTotalTaches = $user->tasks()->where('group_id', '=', null) ->count();
  
-         $nbrTachesTerminees = $user->tasks()->whereNotNull('finished_at')->count();
-         $nbrTachesTermineesEnRetard = $user->tasks()->whereNotNull('finished_at')->whereDate('finished_at', ">", DB::raw('finish_at'))->count();
+         $nbrTachesTerminees = $user->tasks()->where('group_id', '=', null) ->whereNotNull('finished_at')->count();
+         $nbrTachesTermineesEnRetard = $user->tasks()->where('group_id', '=', null) ->whereNotNull('finished_at')->whereDate('finished_at', ">", DB::raw('finish_at'))->count();
  
-         $nrbTachesNondemarrees =  $user->tasks()->whereNull('beginned_at')->count();
+         $nrbTachesNondemarrees =  $user->tasks()->where('group_id', '=', null) ->whereNull('beginned_at')->count();
  
-         $nbrTachesEnCours = $user->tasks()->whereNotNull('beginned_at')->whereNull('finished_at')->count();
-         $nbrTachesDemarreesEnRetard = $user->tasks()->whereNotNull('beginned_at')->whereNull('finished_at')->whereDate('beginned_at', ">", DB::raw('begin_at'))->count();
+         $nbrTachesEnCours = $user->tasks()->where('group_id', '=', null) ->whereNotNull('beginned_at')->whereNull('finished_at')->count();
+         $nbrTachesDemarreesEnRetard = $user->tasks()->where('group_id', '=', null) ->whereNotNull('beginned_at')->whereNull('finished_at')->whereDate('beginned_at', ">", DB::raw('begin_at'))->count();
  
          
          return view('dashboard', [
@@ -195,7 +183,7 @@ class TaskController extends Controller
 
         
  
-         $id = Auth::id();
+         $user_id = Auth::id();
  
          $data = [
              'name' => $request->validated('name'),
@@ -205,12 +193,13 @@ class TaskController extends Controller
              'beginned_at' => $request->input('beginned_at'),
              'finishes_at' => $request->input('finishes_at'),
              'notifiable' => $request->input('notifiable'),
-
          ];
  
          $tache = Task::create($data);
 
-         $tache->user()->associate($id);
+         
+         $tache->user()->associate($user_id);
+        
 
          $tache->group()->associate($request->input('group_id'));
          $tache->level = $request->input('level');
@@ -242,10 +231,18 @@ class TaskController extends Controller
 
          $tache = Task::find($tache);
 
+         $taskComments = null;
+
+         if($tache->group_id !== null)
+         {
+            $group = Group::find($tache->group_id);
+            $taskComments = $group->comments()->orderBy('created_at', 'asc')->paginate(4);
+         }
 
          return view('task.edit', [
              'tache' => $tache,
              'group' => $tache->group_id,
+             'taskComments' => $taskComments
          ]);
      }
  
@@ -270,7 +267,7 @@ class TaskController extends Controller
             ])->with('success', 'Tache modifiéee avec succès');
          }
 
-        return to_route('task.index')->with('success', 'Task modified success');
+        return back()->with('success', 'Task modified success');
       }
  
      /**

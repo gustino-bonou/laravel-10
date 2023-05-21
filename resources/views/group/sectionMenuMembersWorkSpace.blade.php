@@ -6,7 +6,7 @@
         
         <ul class="nav flex-column">
           <li class="nav-item mb-3">
-              <a href="{{ route('task.create') }}">Créer une tache</a>
+              <a href="{{ route('task.create', ['group' => $group->id]) }}">Créer une tache</a>
           </li>
 
           <li class="nav-item mb-3">
@@ -30,9 +30,14 @@
           </li>
         </ul>
       </div>
+      
     </div>
     <div class="col-md-9">
-      <!-- Contenu principal -->
+      <div class="sidebar">
+        <div>
+          
+        </div>
+      </div>
       
 
     </div>
