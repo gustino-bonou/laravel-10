@@ -2,42 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
+
 body{
     background-color:rgb(241, 240, 235);
 }
+.div-commune{
+  align-items: center;
+  align-content: center !important;
+  height: 125px !important;
+  background-color: rgb(31, 126, 88) !important;
+  padding: 4% !important;
+}
+
+.div-commune-content{
+  align-content:center !important;
+  justify-content: space-between !important;
+}
+
+.base-comune-link-hover:hover{
+  font-size: 26px !important;
+  color: coral !important;
+}
+.base-comune-group-link-hover:hover{
+  font-size: 26px !important;
+  color: rgb(26, 9, 95) !important;
+}
+.link-clicked{
+  font-size: 24px !important;
+  color: coral !important;
+}
+.link-clicked-group{
+  font-size: 24px !important;
+  color: rgb(34, 6, 147) !important
+}
+
+.base-comune-link-hover{
+  font-size: 24px !important;
+}
+
 a{
-    font-family: cursive;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS' !important;
     font-size: 18px;
     text-decoration: none !important;
 }
 
-.hidden-div {
-  display: none;
+.table-entete{
+  color:  coral !important;
+  font-size: 22px !important;
 }
-
-.myCard:hover + .hidden-div {
-  display: block;
+.table-entete-group{
+  color:  rgb(10, 243, 33) !important;
+  font-size: 22px !important;
 }
-
-.parent {
-  position: relative;
-}
-
-.hidden-div {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #f1f1f1;
-  padding: 10px;
-}
-
-.parent:hover .hidden-div {
-  display: block;
-}
-
-.hover-trigger:hover + .hidden-div {
-  display: block;
+.btn{
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS' !important;
+    font-size: 18px;
 }
 
 
@@ -52,6 +71,7 @@ a{
 .mon-bouton:hover {
     background-color: red;
 }
+
 .card {
     background-color: #f8f8f8;
     border: 1px solid #e0e0e0;
@@ -165,6 +185,13 @@ a{
     transform: rotate(45deg);
     -webkit-transform: rotate(45deg);
   }
+
+  .container {
+    border-bottom: 2px solid #000000;
+    display: flex;
+    height: 200px;
+    width: 100%;
+}
 
 
   /* anime hover

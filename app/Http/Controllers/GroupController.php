@@ -36,7 +36,7 @@ class GroupController extends Controller
 
         $user = User::find(Auth::id());
 
-        $groups = $user->groupsWhenImAuthor()->paginate(8);
+        $groups = $user->groupsWhenImAuthor()->paginate(9);
 
         return view('group.index', [
             'groups' => $groups
@@ -157,16 +157,13 @@ class GroupController extends Controller
         ])->with('success', 'Vous faites desormais partie de ce groupe');
     }
 
-    public function detachUserOnGroup($group, $user)
+    public function detachUserOnGroup($group)
     {
         $group = Group::findOrFail($group);
-        $user = User::findOrFail($user);
 
-        $group->users()->detach($user);
+        $group->users()->detach(Auth::id());
 
-        return to_route('group.workspace', [
-            'group' =>$group->id
-        ])->with('success', 'Vous faites desormais partie de ce groupe');
+        return to_route('home');
     }
 
     public function viewToAssignRolToUser($group, $task)
@@ -269,6 +266,18 @@ class GroupController extends Controller
         $tasks = $group->tasks()->tasksTerminees()->paginate(15);
  
          return view('group.task.terminees', [
+             'tasks' => $tasks,
+             'group' => $group
+         ]);
+     } 
+     public function tachesTermineesEnRetard($group)
+     {
+    
+        $group = Group::findOrFail($group);
+
+        $tasks = $group->tasks()->tasksTermineesRetard()->paginate(15);
+ 
+         return view('group.task.terminees_retard', [
              'tasks' => $tasks,
              'group' => $group
          ]);

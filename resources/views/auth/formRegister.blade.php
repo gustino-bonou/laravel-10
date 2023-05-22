@@ -35,11 +35,13 @@
                 'type' => 'password',
         ])
 
-        <button class="btn btn-primary mb-5">
+        <div class="text-end m-4 ">
+            <button class="btn btn-primary ">
 
-            S'inscrire
-            
-        </button>       
+                S'inscrire
+                
+            </button>
+        </div>     
     </form>
 
 @endsection

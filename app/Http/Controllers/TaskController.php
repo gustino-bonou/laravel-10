@@ -128,8 +128,12 @@ class TaskController extends Controller
  
      public function statistiques(){
  
+
+        
  
          $user = User::find(Auth::id());
+
+         $tasksEcheanceProches = $user->tasks()->where('group_id', null)->homeTasks()->get();
  
          $nbrTotalTaches = $user->tasks()->where('group_id', '=', null) ->count();
  
@@ -149,6 +153,7 @@ class TaskController extends Controller
              'nrbTachesNondemarrees' => $nrbTachesNondemarrees,
              'nbrTachesEnCours' => $nbrTachesEnCours,
              'nbrTachesDemarreesEnRetard' => $nbrTachesDemarreesEnRetard,
+             'tasksEcheanceProches' =>$tasksEcheanceProches,
          ]);
      }
  

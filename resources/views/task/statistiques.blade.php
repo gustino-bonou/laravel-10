@@ -4,8 +4,8 @@
 
     <table class="table">
         <thead>
-          <tr class="text-success">
-            <th scope="col" class="text-success">Stats</th>
+          <tr class="table-entete">
+            <th scope="col" class="table-entete">Stats</th>
             <th scope="col">Nrb Total Taches</th>
             <th scope="col">Taches terminées</th>
             <th scope="col">Taches terminées en retard</th>
@@ -16,7 +16,7 @@
         </thead>
         <tbody>
           <tr>
-            <th scope="row" class="text-success">Nombre</th>
+            <th scope="row" class="table-entete">Nombre</th>
             <td>{{ $nbrTotalTaches }}</td>
             <td>{{ $nbrTachesTerminees }}</td>
             <td>{{ $nbrTachesTermineesEnRetard }}</td>

@@ -72,7 +72,7 @@ $authId = Auth::user()->id;
     <div class="m-4">
         <div class="text-center mb-5">
             <div class="d-flex gap-2 w-100  justify-content-between align-content-between mb-3">
-                <h5>Cest taches sont celles à écheances les plus proches</h5>
+                <h5>Cest taches sont  à écheances  proches</h5>
                 <a href="{{ route('group.my.tasks', ['group' => $group->id])}}" class=""> Mes taches dans ce groupe </a>
                 <a href="{{ route('task.create', ['group' => $group->id]) }}" class=""> Créer une tache </a>
             </div>

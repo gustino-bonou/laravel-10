@@ -7,13 +7,15 @@
 
 @section('content')
 
-<div class=" text-center my-5">
-    <h3 class="text-info">Vos taches en cours</h3>
+<div class=" text-center my-3 d-flex gap-4 w-100  align-content-center align-items-center  justify-content-between">
+    <h5 class="text-info">Vos taches en cours</h5>
+
+    <a href="{{ route('home') }}">Menu stats</a>
 </div>
 
 <table class="table table.striped">
     <thead>
-        <tr>
+        <tr class="table-entete">
             <th>Tache</th>
             <th>Démarrée le </th>
             <th>Deadline</th>

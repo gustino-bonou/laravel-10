@@ -29,7 +29,7 @@ class TaskEcheanceProcheNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -48,7 +48,9 @@ class TaskEcheanceProcheNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'object' => 'Le tache '.$this->task->name. ' est  à écheance proche',
+            'task_id' => $this->task->id,
+            'type' => 3
         ];
     }
 }

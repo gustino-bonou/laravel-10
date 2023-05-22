@@ -1,6 +1,6 @@
 @extends('base')
 @section('title')
-    Mes taches
+    Les tache du groupe
 @endsection
 <?php
 $route = request()->route()->getName();
@@ -18,7 +18,7 @@ $route = request()->route()->getName();
 
 <table class="table table.striped">
     <thead>
-        <tr>
+        <tr class="link-clicked-group">
             <th>Tache</th>
             <th>Demarrage</th>
             <th>Deadline</th>
@@ -48,7 +48,7 @@ $route = request()->route()->getName();
                                 @csrf
                                 @method('delete')
                                 <button class="btn btn-danger m-1 btn-sm">Supprimer</button>
-                            </form>
+                        </form>
 
                             
                     </div>

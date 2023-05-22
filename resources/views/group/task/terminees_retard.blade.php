@@ -14,7 +14,7 @@
 
 <table class="table table.striped">
     <thead>
-        <tr>
+        <tr class="link-clicked-group">
             <th>Tache</th>
             <th>Devait terminer le  </th>
             <th>Terminée le</th>

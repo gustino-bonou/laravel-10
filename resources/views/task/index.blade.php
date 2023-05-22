@@ -12,13 +12,14 @@ $route = request()->route()->getName();
     $route = request()->route()->getName();
 ?>
 
-<div class=" text-center my-5">
-    <h3 class="text-info">Toutes vos taches</h3>
-</div>
+<div class=" text-center my-3 d-flex gap-4 w-100  align-content-center align-items-center  justify-content-between">
+    <h5 class="text-info">Toutes vos taches</h5>
 
+    <a href="{{ route('home') }}">Menu stats</a>
+</div>
 <table class="table table.striped">
     <thead>
-        <tr>
+        <tr  class="table-entete">
             <th>Tache</th>
             <th>Demarrage</th>
             <th>Deadline</th>

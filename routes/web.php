@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TaskController;
 
 /*
@@ -22,7 +23,7 @@ use App\Http\Controllers\TaskController;
     return view('welcome');
 }); */
 
-Route::get('/', [TaskController::class, 'homeTasks'])->middleware('auth')->name('home');
+Route::get('/', [TaskController::class, 'statistiques'])->middleware('auth')->name('home');
 
 Route::get('/login', [AuthController::class, 'formLogin'])->name('auth.formLogin');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
@@ -52,6 +53,9 @@ Route::prefix('/blog')->name('blog.')->controller(BlogController::class)->group(
 
 Route::resource('/task', TaskController::class)->middleware('auth')->except(['show', 'create']);
 
+Route::get('/task/group/mynotifications', [HomeController::class, 'myNotifications'])->middleware('auth')->name('task.group.mynotificaions');
+Route::get('/task/group/mynotifications/{notification}/detail', [HomeController::class, 'notificationDetail'])->middleware('auth')->name('task.group.notification.detail');
+
 Route::get('/task/create/{group?}', [TaskController::class, 'create'])->middleware('auth')->name('task.create');
 
 Route::prefix('/task')->name('task.')->middleware('auth')->group(function(){
@@ -76,7 +80,7 @@ Route::prefix('/group')->name('group.')->middleware('auth')->group(function(){
 
     Route::get('invite/{group}/{user}', [GroupController::class, 'inviteUserToJoinGroup'])->name('invite.user');
     Route::get('accept/invitation/{group}/{user}', [GroupController::class, 'attachUserToGroup'])->name('attach.user');
-    Route::get('detach/user/{group}/{user}', [GroupController::class, 'detachUserOnGroup'])->name('detach.user');
+    Route::get('detach/user/{group}/detach', [GroupController::class, 'detachUserOnGroup'])->name('detach.user');
 
     Route::get('{group}/{task}/assign', [GroupController::class, 'viewToAssignRolToUser'])->name('view.assign.rol');
     Route::post('tasks/assign/{task}', [GroupController::class, 'assinRolToUser'])->name('assign.rol');
@@ -87,6 +91,7 @@ Route::prefix('/group')->name('group.')->middleware('auth')->group(function(){
     Route::get('{group}/tasks_non_demarrees', [GroupController::class, 'tachesNonDemarrees'])->name('tasks.non.demarrees');
     Route::get('{group}/tasks_en_cours', [GroupController::class, 'tachesEnCours'])->name('tasks.en.cours');
     Route::get('{group}/tasks_terminees', [GroupController::class, 'tachesTerminees'])->name('tasks.terminees');
+    Route::get('{group}/task/terminees/retard', [GroupController::class, 'tachesTermineesEnRetard'])->name('tasks.terminees.retard');
     Route::get('{group}/tasks/user', [GroupController::class, 'myTasksInTheGroup'])->name('my.tasks');
     Route::get('explore/communities', [GroupController::class, 'groupsWhenImMember'])->name('im.member');
 

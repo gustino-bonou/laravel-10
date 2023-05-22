@@ -1,7 +1,6 @@
 <div class="row mb-5">
     <div class="col-md-3">
       <!-- Sidebar -->
-      <div class="mb-3"><h3 class=" text-info ">Menu</h3></div>
       <div class="sidebar ">
         
         <ul class="nav flex-column">
@@ -26,16 +25,18 @@
               <a href="{{ route('group.tasks.non.demarrees', $group->id) }}">Taches non démarrées</a>
           </li>
           <li class="nav-item mb-3">
-              <a href="{{ route('task.retard') }}" >Taches terminées avec retard</a>
+              <a href="{{ route('group.tasks.terminees.retard', $group->id) }}" >Taches terminées avec retard</a>
           </li>
         </ul>
       </div>
       
     </div>
     <div class="col-md-9">
-      <div class="sidebar">
+      <div class="sidebar text-end">
         <div>
-          
+          <a href="">
+            
+          </a> 
         </div>
       </div>
       

@@ -2,13 +2,14 @@
 
 namespace App\Notifications;
 
-use App\Models\Group;
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Group;
+use Illuminate\Support\Str;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
 class AssignRoleToUserNotif extends Notification
 {
@@ -29,7 +30,7 @@ class AssignRoleToUserNotif extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['mail','database'];
     }
 
     /**
@@ -56,6 +57,8 @@ class AssignRoleToUserNotif extends Notification
         return [ 
             'task_id' => $this->task->id,
             'group_id' => $this->group->id,
+            'type' => 1,
+            'object' => 'Nouvelle tache vous est confiée dans le groupe ' . Str::substr($this->group->name, 0, 35) . '...'
         ];
     }
 }

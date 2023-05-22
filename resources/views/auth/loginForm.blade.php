@@ -10,7 +10,7 @@
 <form action="{{ route('auth.login') }}" method="post" class="vstack gap-3">
 
 @csrf
-<div class="form-group">
+<div class="form-group m-4">
 
     <label for="email"> Email </label>
 
@@ -22,7 +22,7 @@
         
 </div>
 
-<div class="form-group">
+<div class="form-group m-4">
 
     <label for="email"> Mot de passe </label>
 
@@ -33,7 +33,9 @@
     @enderror
         
 </div>
-<button class="btn btn-primary"> Se connecter </button>
+<div class="mt-5 text-end">
+    <button class="btn btn-primary"> Se connecter </button>
+</div>
 </form>
 </div>
 </div>

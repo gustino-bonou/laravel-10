@@ -1,20 +1,21 @@
 @extends('base')
 
 @section('title')
-    Taches terminées
+Vos taches terminées
     
 @endsection
 
 @section('content')
 
-<div class=" text-center my-5">
-    <h3 class="text-info">Vos taches terminées</h3>
-</div>
+<div class=" text-center my-3 d-flex gap-4 w-100  align-content-center align-items-center  justify-content-between">
+    <h5 class="text-info">@yield('title')</h5>
 
+    <a href="{{ route('home') }}">Menu stats</a>
+</div>
 
 <table class="table table.striped">
     <thead>
-        <tr>
+        <tr class="table-entete">
             <th>Tache</th>
             <th>Démarrée le  </th>
             <th>Terminée le</th>

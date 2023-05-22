@@ -70,7 +70,7 @@ class Task extends Model
         }
         elseif($this->beginned_at == null)
         {
-            $status = 'Non démarrée';
+            $status = 'A venir';
         }
         elseif($this->beginned_at !== null && $this->finished_at == null)
         {
@@ -98,6 +98,6 @@ class Task extends Model
     }
     public function scopeHomeTasks(Builder $builder)
     {
-        return $builder->whereNull('finished_at')->whereDate('finish_at', '<=', Carbon::now()->addDays(20))->orderBy('finish_at', 'asc')->limit(6);
+        return $builder->whereNull('finished_at')->whereDate('finish_at', '<=', Carbon::now()->addDays(6))->orderBy('finish_at', 'asc')->limit(6);
     }
 }

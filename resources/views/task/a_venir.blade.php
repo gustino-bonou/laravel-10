@@ -7,14 +7,18 @@
 
 @section('content')
 
-<div class=" text-center my-5">
-    <h3 class="text-info">Vos taches non démarrées</h3>
+<div class="">
+    
+<div class=" text-center my-3 d-flex gap-4 w-100  align-content-center align-items-center  justify-content-between">
+    <h5 class="text-info">Vos taches non démarrées</h5>
+
+    <a href="{{ route('home') }}">Menu stats</a>
 </div>
 
 <table class="table table.striped">
     <thead>
-        <tr>
-            <th>Tache</th>
+        <tr class="table-entete">
+            <th class="">Tache</th>
             <th>Démarrage </th>
             <th>Deadline</th>
             <th>Niveau</th>
@@ -25,7 +29,8 @@
     <tbody>
 
         @forelse ($taches as $tache)
-            <tr>
+
+            <tr class="">
                 
                 <td>{{ $tache->name }}</td>
                 <td>{{ $tache->getDate($tache->begin_at) }}</td>
@@ -58,5 +63,6 @@
 </table>
 
 {{ $taches->links() }}
+</div>
     
 @endsection
