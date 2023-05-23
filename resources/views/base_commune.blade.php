@@ -50,7 +50,12 @@ $route = request()->route()->getName();
    
      @auth
    
-     <a class="nav-link   text-white  base-comune-link-hover" href="{{ route('blog.index') }}">{{ \Illuminate\Support\Facades\Auth::user()->name }}</a>
+     <form action="{{ route('auth.logout') }} " method="post"> 
+      @csrf
+      @method('delete')
+
+      <button class="nav-item  btn btn-outline-success text-white">{{ \Illuminate\Support\Facades\Auth::user()->name }} Se deconnecter</button>
+     </form>
 
      @endauth
    

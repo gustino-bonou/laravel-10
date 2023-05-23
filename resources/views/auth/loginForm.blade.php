@@ -33,8 +33,10 @@
     @enderror
         
 </div>
-<div class="mt-5 text-end">
-    <button class="btn btn-primary"> Se connecter </button>
+<div class=" d-flex align-content-between m-4  align-items-center  justify-content-between">
+    <a href="{{ route('auth.register') }}" class=" btn btn-secondary mr-4  btn-sm">ou s'inscrire</a>
+    <button class="btn btn-primary  btn-sm"> Se connecter </button>
+
 </div>
 </form>
 </div>

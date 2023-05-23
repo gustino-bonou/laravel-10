@@ -25,7 +25,7 @@ class RegisterRequest extends FormRequest
         return [
             'name' => ['required', 'min:3', ],
             'email' => ['required', 'email'],
-            'password' => ['required', 'min:4', 'same:password_confirmation'],
+            'password' => ['required', 'same:password_confirmation', 'regex:/^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/'],
             'password_confirmation' => ['required', 'min:4',]
         ];
     }

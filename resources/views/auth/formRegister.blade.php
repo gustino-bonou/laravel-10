@@ -35,13 +35,13 @@
                 'type' => 'password',
         ])
 
-        <div class="text-end m-4 ">
-            <button class="btn btn-primary ">
+<div class=" d-flex align-content-between m-4  align-items-center  justify-content-between">
+    <a href="{{ route('auth.login') }}" class=" btn btn-secondary mr-4  btn-sm">ou se connecter</a>
+    <button class="btn btn-primary btn-sm"> S'inscrire </button>
 
-                S'inscrire
-                
-            </button>
-        </div>     
+</div>
+
+             
     </form>
 
 @endsection
