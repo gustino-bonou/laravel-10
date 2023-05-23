@@ -59,5 +59,5 @@
 </table>
 
 {{ $taches->links() }}
-    
+
 @endsection

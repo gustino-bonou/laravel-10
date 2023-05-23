@@ -64,5 +64,5 @@
 
 {{ $taches->links() }}
 </div>
-    
+
 @endsection

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ExporteDataController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TaskController;
@@ -99,3 +100,4 @@ Route::prefix('/group')->name('group.')->middleware('auth')->group(function(){
     Route::post('{group}/{task}/comment', [CommentController::class, 'store'])->name('task.comment.store');
 });
 
+Route::get('tasks/export/{task}/{type}', [ExporteDataController::class, 'export'])->middleware('auth')->name('tasks.export');

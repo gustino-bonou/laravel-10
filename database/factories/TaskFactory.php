@@ -17,10 +17,10 @@ class TaskFactory extends Factory
      */
     public function definition(): array
     {
-        $begin_at = $this->faker->dateTimeBetween('-1 day', '+3 week');
+        $begin_at = $this->faker->dateTimeBetween('-2 day', '+3 week');
         $finish_at = $this->faker->dateTimeBetween($begin_at, '+6 weeks');
 
-        $beginned_at = Carbon::instance($begin_at)->isBefore(now()) ? $this->faker->dateTimeBetween('-1 day', $begin_at) : null;
+        $beginned_at = Carbon::instance($begin_at)->isBefore(now()) ? $this->faker->dateTimeBetween('-2 day', $begin_at) : null;
         $finished_at = Carbon::instance($finish_at)->isBefore(now()) ? $this->faker->dateTimeBetween($finish_at, '+6 week') : null;
 
         return [

@@ -60,5 +60,5 @@ Vos taches terminées
 </table>
 
 {{ $taches->links() }}
-    
+
 @endsection

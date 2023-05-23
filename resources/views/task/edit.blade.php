@@ -1,7 +1,7 @@
 
 @extends('base')
 
-@section('title', $tache->id == null ? 'Créer une tacte': 'Midifier la tacche numéro ' . $tache->id)
+@section('title', $tache->id == null ? 'Créer une tache': 'Modifier la tacche numéro ' . $tache->id)
 
 @section('content')
 
@@ -133,11 +133,30 @@
                 </div>
                                        
             </form>
+
         </div>
 
         <div class=" m-5">
             @include('group.groupsTaskEdit')
         </div>
+
+        @if ($tache->id !== null)
+        <div>
+            <ul>
+                <li>
+                    <a href="{{route('tasks.export', ['task' => $tache->id, 'type' => 'pdf'])}}">Exporter en pdf</a>
+                </li>
+                <li>
+                    <a href="{{route('tasks.export', ['task' => $tache->id, 'type' => 'xlsx'])}}">Exporter en xlsx</a>
+                </li>
+                <li>
+                    <a href="{{route('tasks.export', ['task' => $tache->id, 'type' => 'csv'])}}">Exporter en csv</a>
+                </li>
+            </ul>
+            
+        </div>
+            
+        @endif
     </div>
 @endsection
 

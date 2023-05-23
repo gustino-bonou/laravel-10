@@ -272,7 +272,7 @@ class TaskController extends Controller
             ])->with('success', 'Tache modifiéee avec succès');
          }
 
-        return back()->with('success', 'Task modified success');
+        return to_route('task.index')->with('success', 'Task modified success');
       }
  
      /**

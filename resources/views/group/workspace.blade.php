@@ -72,9 +72,13 @@ $authId = Auth::user()->id;
     <div class="m-4">
         <div class="text-center mb-5">
             <div class="d-flex gap-2 w-100  justify-content-between align-content-between mb-3">
+                
+                <a href="{{ route('group.my.tasks', ['group' => $group->id])}}" class="link-clicked-group"> Mes taches dans ce groupe </a>
+                <a href="{{ route('task.create', ['group' => $group->id]) }}" class="link-clicked-group"> Créer une tache </a>
+            </div>
+
+            <div>
                 <h5>Cest taches sont  à écheances  proches</h5>
-                <a href="{{ route('group.my.tasks', ['group' => $group->id])}}" class=""> Mes taches dans ce groupe </a>
-                <a href="{{ route('task.create', ['group' => $group->id]) }}" class=""> Créer une tache </a>
             </div>
             
             <div class="row">
@@ -109,10 +113,10 @@ $authId = Auth::user()->id;
                 </div>
                 @endcan
                 @empty
-                    <div class="container my-5">
-                        <p>Hoppp ! Vous n'estes pas sous pression. Ajouter une tache  
+                    <div class=" my-5 text-center">
+                        <h5>Hoppp ! Vous n'estes pas sous pression. Ajouter une tache  
                             <a href="{{ route('task.create', ['group' => $group->id]) }}" class=""> ici </a>
-                        </p>
+                        </h5>
                     </div>
                 @endforelse
             </div>

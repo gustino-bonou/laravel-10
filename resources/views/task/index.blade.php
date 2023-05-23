@@ -69,6 +69,7 @@ $route = request()->route()->getName();
 </div>
 
 
+
 @endsection('content')
 
 

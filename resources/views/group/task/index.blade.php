@@ -56,7 +56,7 @@ $route = request()->route()->getName();
             </tr>
         @empty
         <div class="text-center m-5">
-            Aucune tache Dans ce groupe. Veuillez en ajouter dans votre espace de travail
+            <h3>Aucune tache Dans ce groupe. Veuillez en ajouter dans votre espace de travail</h3>
         </div>
         @endforelse
 

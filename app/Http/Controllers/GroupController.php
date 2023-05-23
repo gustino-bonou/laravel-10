@@ -305,7 +305,7 @@ class GroupController extends Controller
     
         $groups = Group::whereHas('users', function($query) {
             $query->where('user_id', Auth::id());
-        })->get();
+        })->where('user_id', '!=', Auth::id())->get();
 
         return view('group.groups_im_member', [
             'groups' => $groups

@@ -66,7 +66,7 @@ class GroupPolicy
 
     public function inviteUserToJoinGroup(User $user, Group $group, ): bool
     {
-        return $user->role === 'admin' && $group->user_id === $user->id;
+        return $group->user_id === $user->id;
     }
 
     public function workspace(User $user, Group $group): bool

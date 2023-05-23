@@ -3,8 +3,8 @@
 @if ($tache->group_id !== null)
 <div class="m-3">
     <div class="mb-5">
-        <div class="text-end m-3">
-            <p>Auteur de la tache: {{$tache->user->name}}</p>
+        <div class="mt-4 mb-4">
+            <h5>Auteur de la tache: {{$tache->user->name}}</h5>
         </div>
         <form action="{{ route('group.task.comment.store', ['group' => $tache->group, 'task' => $tache->id])}}" method="post">
             @csrf
