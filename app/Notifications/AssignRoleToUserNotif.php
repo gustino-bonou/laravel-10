@@ -54,11 +54,11 @@ class AssignRoleToUserNotif extends Notification
    
     public function toArray(object $notifiable): array
     {
-        return [ 
-            'task_id' => $this->task->id,
-            'group_id' => $this->group->id,
-            'type' => 1,
-            'object' => 'Nouvelle tache vous est confiée dans le groupe ' . Str::substr($this->group->name, 0, 35) . '...'
+        return [
+            'object' => "Une nouvelle tache vous a été confiée dans le groupe  " . $this->group->name,
+            'task' => $this->task->id,
+            'group' => $this->group->id,
+            'type' => 'tacheAssignee'
         ];
     }
 }

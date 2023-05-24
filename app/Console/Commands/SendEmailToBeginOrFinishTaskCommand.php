@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Models\Task;
 use App\Models\User;
+use App\Notifications\BeginnedTaskNotification;
+use App\Notifications\FinishTaskNotification;
 use App\Notifications\MarqueBeginnedOrFinishedTaskNotification;
 use Illuminate\Support\Carbon;
 use Illuminate\Console\Command;
@@ -42,19 +44,17 @@ class SendEmailToBeginOrFinishTaskCommand extends Command
 
                 if( $begin->isSameDay(now()) && $task->beginned_at === null )
                 {
-                    $user->notify(new MarqueBeginnedOrFinishedTaskNotification($task, $user));
-                    if($task->notififiable)
+                    if($task->notifiable === 1)
                     {
-                        $user->notify(new MarqueBeginnedOrFinishedTaskNotification($task, $user));
+                        $user->notify(new BeginnedTaskNotification($task, $user));
                     }
                     
                 }
-
-                if($finish->isSameDay(now()) && $task->finished_at === null && $task->beginned_at !== null)
+                elseif($finish->isSameDay(now()) && $task->finished_at === null )
                 {
-                    if($task->notififiable)
+                    if($task->notifiable === 1)
                     {
-                        $user->notify(new MarqueBeginnedOrFinishedTaskNotification($task, $user));
+                        $user->notify(new FinishTaskNotification($task, $user));
                     }
                 }  
                 

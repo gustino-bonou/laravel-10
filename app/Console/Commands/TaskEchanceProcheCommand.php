@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
+use App\Notifications\TacheEcheanceNotification;
 use App\Notifications\TaskEcheanceProcheNotification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -38,7 +39,7 @@ class TaskEchanceProcheCommand extends Command
 
                 if($finish_at < Carbon::now()->addDays(3))
                 {
-                    $user->notify(new TaskEcheanceProcheNotification($task, $user));
+                    $user->notify(new TacheEcheanceNotification($task, $user));
                 }
             }
         }

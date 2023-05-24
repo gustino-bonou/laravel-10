@@ -94,35 +94,35 @@ class TaskController extends Controller
          ]);
      }
  
-     public function marqueToFinish ($id){
-         $task = Task::find($id);
+     public function marqueToFinish ($task){
+         $task = Task::find($task);
  
          if($task->finished_at !== null)
          {
-            return to_route('task.index')->with('success', 'Tache: '.$task->name . 'était déjà marquée comme terminée');
+            return to_route('task.en_cours')->with('success', 'Tache: '.$task->name . '  marquée comme terminée');
          }
 
          $task->finished_at = now();
  
          $task->save();
  
-         return back();
+         return to_route('task.en_cours')->with('success', 'Tache: '.$task->name . '  marquée comme terminée');
      }
-     public function marqueToBegin  ($id)
+     public function marqueToBegin  ($task)
      {
 
-         $task = Task::find($id);
+         $task = Task::find($task);
 
          if($task->beginned_at !== null)
          {
-            return to_route('task.index')->with('success', 'Tache: '.$task->name . 'était déjà marquée comme démarrée');
+            return to_route('task.a_venir')->with('success', 'Tache: '.$task->name . 'était déjà marquée comme démarrée');
          }
  
          $task->beginned_at = now();
  
          $task->save();
  
-         return back();
+         return to_route('task.a_venir')->with('success', 'Tache: '.$task->name . '  marquée comme démarrée');
      }
 
  
@@ -230,11 +230,15 @@ class TaskController extends Controller
      /**
       * Show the form for editing the specified resource.
       */
-     public function edit( $tache)
+     public function edit(Request $request,  $tache)
      {
 
 
+
          $tache = Task::find($tache);
+
+
+        
 
          $taskComments = null;
 

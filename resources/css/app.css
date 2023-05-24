@@ -35,6 +35,10 @@ body{
   font-size: 24px !important;
   color: rgb(34, 6, 147) !important
 }
+.link-clicked-notif{
+  font-size: 24px !important;
+  color: rgb(203, 224, 11) !important
+}
 
 .base-comune-link-hover{
   font-size: 24px !important;
@@ -101,6 +105,19 @@ a{
 
   .card .btn {
     margin-right: 10px;
+  }
+
+  .notification {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .notification:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .notification:nth-child(odd) {
+    background-color: #e6e6e6;
   }
   
   

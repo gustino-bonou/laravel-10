@@ -2,10 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Group;
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Group;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Auth;
 
 class TaskPolicy
 {
@@ -22,7 +23,7 @@ class TaskPolicy
      */
     public function view(User $user, Task $task): bool
     {
-        return ($task->user_id === $user->id) || ($task->group_id !== null &&  $task->group->users->contains($user->id));
+        return ($user->id === $task->user_id);
     }
 
     /**
@@ -40,6 +41,7 @@ class TaskPolicy
     {
         return ($task->user_id === $user->id);
     }
+
 
     /**
      * Determine whether the user can delete the model.
@@ -63,5 +65,14 @@ class TaskPolicy
     public function forceDelete(User $user, Task $task): bool
     {
         //
+    }
+
+    public function marqueToFinish(User $user, Task $task)
+    {
+        return ($task->user_id === $user->id) || ($task->group_id !== null &&  $task->group->users->contains($user->id));
+    }
+    public function marqueToBegin(User $user, Task $task)
+    {
+        return ($task->user_id === $user->id) || ($task->group_id !== null &&  $task->group->users->contains($user->id));
     }
 }

@@ -26,11 +26,11 @@ use App\Http\Controllers\TaskController;
 
 Route::get('/', [TaskController::class, 'statistiques'])->middleware('auth')->name('home');
 
-Route::get('/login', [AuthController::class, 'formLogin'])->name('auth.formLogin');
-Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
-Route::delete('/logout', [AuthController::class, 'logout'])->name('auth.logout');
-Route::get('/register', [AuthController::class, 'register'])->name('auth.register');
-Route::post('/register', [AuthController::class, 'doRegister'])->name('auth.doRegister');
+Route::get('/login', [AuthController::class, 'formLogin'])->name('auth.formLogin')->middleware('guest');
+Route::post('/login', [AuthController::class, 'login'])->name('auth.login')->middleware('guest');
+Route::delete('/logout', [AuthController::class, 'logout'])->name('auth.logout')->middleware('auth');
+Route::get('/register', [AuthController::class, 'register'])->name('auth.register')->middleware('guest');
+Route::post('/register', [AuthController::class, 'doRegister'])->name('auth.doRegister')->middleware('guest');
 
 
 Route::prefix('/blog')->name('blog.')->controller(BlogController::class)->group(function(){
@@ -52,18 +52,19 @@ Route::prefix('/blog')->name('blog.')->controller(BlogController::class)->group(
 
 });
 
-Route::resource('/task', TaskController::class)->middleware('auth')->except(['show', 'create']);
+Route::resource('/task', TaskController::class)->middleware('auth')->except(['show', 'create', 'edit']);
+Route::get('/task/{task}/edit', [TaskController::class, 'edit'])->middleware('auth')->name('task.edit');
 
-Route::get('/task/group/mynotifications', [HomeController::class, 'myNotifications'])->middleware('auth')->name('task.group.mynotificaions');
-Route::get('/task/group/mynotifications/{notification}/detail', [HomeController::class, 'notificationDetail'])->middleware('auth')->name('task.group.notification.detail');
+Route::get('/task/mynotifications', [HomeController::class, 'beginTaskNotification'])->middleware('auth')->name('task.group.mynotificaions');
+Route::get('/task/mynotifications/{notification}/detail', [HomeController::class, 'notificationDetail'])->middleware('auth')->name('task.group.notification.detail');
 
 Route::get('/task/create/{group?}', [TaskController::class, 'create'])->middleware('auth')->name('task.create');
 
 Route::prefix('/task')->name('task.')->middleware('auth')->group(function(){
 
     Route::get('notifiable/{tache}', [TaskController::class, 'setNotifiableColumn'])->name('notifiable');
-    Route::get('{id}/finish', [TaskController::class, 'marqueToFinish'])->name('marque.finish');
-    Route::get('{id}/begin', [TaskController::class, 'marqueToBegin'])->name('marque.begin');
+    Route::get('{task}/finish', [TaskController::class, 'marqueToFinish'])->name('marque.finish');
+    Route::get('{task}/begin', [TaskController::class, 'marqueToBegin'])->name('marque.begin');
     Route::get('statistiques', [TaskController::class, 'statistiques'])->name('statistiques');  
 
 
