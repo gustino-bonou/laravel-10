@@ -193,12 +193,6 @@ class GroupController extends Controller
         {
             $user = User::findOrFail($value);
 
-            //notification enrégistrée dans la base de données
-
-           // $user->notify(new AssignRoleToUserNotif($group, $user, $task));
-
-
-            //notification envoyée par mail grace à un event
             event(new SendNotificationToUserConfiedTaskInGroupEvent($group, $user, $task));
 
         }

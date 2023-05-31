@@ -1,12 +1,12 @@
-<div class="row mb-5">
-    <div class="col-md-3">
+<div class="d-flex mb-5">
+
+
+ 
+    <div class="">
       <!-- Sidebar -->
       <div class="sidebar ">
         
         <ul class="nav flex-column">
-          <li class="nav-item mb-3">
-              <a href="{{ route('task.create', ['group' => $group->id]) }}">Créer une tache</a>
-          </li>
 
           <li class="nav-item mb-3">
               <a href="{{ route('group.tasks.index', $group->id) }}" >Toutes les taches du groupe</a>
@@ -31,7 +31,8 @@
       </div>
       
     </div>
-    <div class="col-md-9">
+
+    <div class="">
       <div class="sidebar text-end">
         <div>
           <a href="">

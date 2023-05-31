@@ -37,13 +37,12 @@
                     {{ Str::ucfirst($task->level) }}
                 </td>
                 <td class="font-weight-bold">
-                    {{ $task->getDiffInDates($task->finished_at, $task->finish_at) }}</td>
+                    {{ $task->getDiffInDates(htmlspecialchars($task->finished_at), htmlspecialchars($task->finish_at)) }}</td>
                 </td>
 
                 <td>
 
                     <div class="d-flex gap-2 w-100 justify-content-end">
-                        {{-- Pour vérifier si l'utilisateur a le droit avant d'afficher le bouton --}}
 
                         <a href="{{ route('task.edit', ['task' => $task->id ]) }}" class="btn btn-primary m-1 btn-sm">Détails</a>
 
@@ -58,14 +57,13 @@
                 </td>
             </tr>
         @empty
-        <div>
-            
+        <div class=" text-center">
+            <h5 class="not-task-info">Aucune tache terminée en retard</h5>
         </div>
         @endforelse
 
     </tbody>
 </table>
 
-{{ $tasks->links() }}
     
 @endsection

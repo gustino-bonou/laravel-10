@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Group;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
@@ -77,4 +78,21 @@ class GroupPolicy
     {
         return  $group->user->id === $user->id;
     }
+    public function createTaskInGroup(User $user, Group $group): bool
+    {
+        return  $group->user->id === $user->id;
+    }
+    public function assinRolToUser(User $user, Group $group): bool
+    {        
+        return $group->user->id ===  $user->id ;
+    }
+    
+    public function detachUserOnTask(User $user, Group $group): bool
+    {        
+        return $group->user->id ===  $user->id ;
+    }
+
+    
+
+    
 }

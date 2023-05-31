@@ -34,16 +34,19 @@
                 <td>
                     <div class="d-flex gap-3  justify-content-end">
 
+                        @can('update', $task)
                         <a href="{{ route('task.edit', ['task' => $task->id ]) }}" class="btn btn-primary btn-sm m-1">Editer</a>
                         {{-- Pour vérifier si l'utilisateur a le droit avant d'afficher le bouton --}}
 
+                            @can('updateGroupTask', $task)
                             <form action="{{ route('task.destroy', $task->id) }}" method="post">
                                     @csrf
                                     @method('delete')
                                     <button class="btn btn-danger m-1 btn-sm">Supprimer</button>
                             </form>
+                            @endcan
                             <a href="{{ route('task.marque.begin', $task->id) }}" class="btn  btn-info m-1 btn-sm">Démarrer</a>
-                          
+                        @endcan
                     </div>
                 </td>
             </tr>

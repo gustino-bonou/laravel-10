@@ -6,7 +6,7 @@
         <thead>
           <tr class="table-entete">
             <th scope="col" class="table-entete">Stats</th>
-            <th scope="col">Nrb Total Taches</th>
+            <th scope="col"><a href="">Nrb Total Taches</a></th>
             <th scope="col">Taches terminées</th>
             <th scope="col">Taches terminées en retard</th>
             <th scope="col">Taches en cours</th>

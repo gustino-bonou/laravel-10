@@ -40,15 +40,19 @@ $route = request()->route()->getName();
                 <td>
                     <div class="d-flex gap-4 w-100 justify-content-end">
 
-                        <a href="{{ route('task.edit', ['task' => $task->id ]) }}" class="btn btn-primary m-1 btn-sm">Editer</a>
-                        
-                        {{-- Pour vérifier si l'utilisateur a le droit avant d'afficher le bouton --}}
+                        @can('update', $task)
+                            <a href="{{ route('task.edit', ['task' => $task->id ]) }}" class="btn btn-primary m-1 btn-sm">Détails</a>
+                            
+                            {{-- Pour vérifier si l'utilisateur a le droit avant d'afficher le bouton --}}
 
-                          <form action="{{ route('task.destroy', $task->id) }}" method="post">
-                                @csrf
-                                @method('delete')
-                                <button class="btn btn-danger m-1 btn-sm">Supprimer</button>
-                        </form>
+                            @can('updateGroupTask', $task)
+                            <form action="{{ route('task.destroy', $task->id) }}" method="post">
+                                    @csrf
+                                    @method('delete')
+                                    <button class="btn btn-danger m-1 btn-sm">Supprimer</button>
+                            </form>
+                            @endcan
+                        @endcan
 
                             
                     </div>

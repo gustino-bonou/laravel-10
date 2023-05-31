@@ -54,8 +54,8 @@
                 </td>
             </tr>
         @empty
-        <div>
-            
+        <div class=" ">
+            <h5 class="not-task-info">Aucune tache non démarrée</h5>
         </div>
         @endforelse
 

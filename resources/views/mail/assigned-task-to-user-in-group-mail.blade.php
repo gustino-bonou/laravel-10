@@ -3,11 +3,11 @@
 
 Consulter votre compte. <br><br>
 
-<p>{{ $group->user->name }} a confié une tache dans le groupe</p> <br><br>
+<p>{{ $group->user->name }} vous a confié une tache dans le groupe {{ $group->name }}</p> <br><br>
 <h5>{{ $group->user->name }}</h5> <br><br>
 
 <div>
-    <a href="{{ route('task.edit', ['task' => $task->id])}}">Cliquer ici pour voir plus</a>
+    <a href="{{ route('task.edit', ['task' => $task->id])}}">Cliquer ici pour voir plus sur la tache</a>
 </div>
 
 

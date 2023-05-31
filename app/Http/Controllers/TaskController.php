@@ -125,7 +125,7 @@ class TaskController extends Controller
          return to_route('task.a_venir')->with('success', 'Tache: '.$task->name . '  marquée comme démarrée');
      }
 
- 
+ /* 
      public function statistiques(){
  
 
@@ -137,13 +137,15 @@ class TaskController extends Controller
  
          $nbrTotalTaches = $user->tasks()->where('group_id', '=', null) ->count();
  
-         $nbrTachesTerminees = $user->tasks()->where('group_id', '=', null) ->whereNotNull('finished_at')->count();
-         $nbrTachesTermineesEnRetard = $user->tasks()->where('group_id', '=', null) ->whereNotNull('finished_at')->whereDate('finished_at', ">", DB::raw('finish_at'))->count();
+         $nbrTachesTerminees = $user->tasks()->tasksTerminees()->count();
+
+         $nbrTachesTermineesEnRetard = $user->tasks()->tasksTermineesRetard()->count();
  
          $nrbTachesNondemarrees =  $user->tasks()->where('group_id', '=', null) ->whereNull('beginned_at')->count();
  
          $nbrTachesEnCours = $user->tasks()->where('group_id', '=', null) ->whereNotNull('beginned_at')->whereNull('finished_at')->count();
-         $nbrTachesDemarreesEnRetard = $user->tasks()->where('group_id', '=', null) ->whereNotNull('beginned_at')->whereNull('finished_at')->whereDate('beginned_at', ">", DB::raw('begin_at'))->count();
+
+         $nbrTachesDemarreesEnRetard = $user->tasks()->where('group_id', '=', null) ->whereNotNull('beginned_at')->whereDate('beginned_at', ">", DB::raw('begin_at'))->count();
  
          
          return view('dashboard', [
@@ -155,7 +157,7 @@ class TaskController extends Controller
              'nbrTachesDemarreesEnRetard' => $nbrTachesDemarreesEnRetard,
              'tasksEcheanceProches' =>$tasksEcheanceProches,
          ]);
-     }
+     } */
  
      public function setNotifiableColumn($tache){
  
@@ -233,12 +235,13 @@ class TaskController extends Controller
      public function edit(Request $request,  $tache)
      {
 
-
+        
 
          $tache = Task::find($tache);
 
-
-        
+         //control si l'utilisateur à le droit de voir la tache
+         //ici, il a le droit si et seulment si il est l'auteur(c'est lui qui a créer la tache) ou bien il est associé à la tache dans un groupe
+         $this->authorize('update', $tache);
 
          $taskComments = null;
 
@@ -261,6 +264,8 @@ class TaskController extends Controller
 
       public function update(TaskRequest $request, Task $task)
       {
+
+        $this->authorize('updateGroupTask', $task);
 
         $task->update($request->validated());
 
@@ -300,36 +305,54 @@ class TaskController extends Controller
          return back()->with('Suppression effectuée avec succès');
      }
  
-     public function dashoard(){
-         $user = User::find(Auth::id());
- 
-         $nbrTotalTaches = $user->taches()->count();
- 
-         $nbrTachesTerminees = $user->taches()->whereNotNull('finished_at')->count();
-         $nbrTachesTermineesEnRetard = $user->taches()->whereNotNull('finished_at')->whereDate('finished_at', ">", DB::raw('finish_at'))->count();
- 
-         $nrbTachesNondemarrees =  $user->taches()->whereNull('beginned_at')->count();
- 
-         $nbrTachesEnCours = $user->taches()->whereNotNull('beginned_at')->whereNull('finished_at')->count();
-         $nbrTachesDemarreesEnRetard = $user->taches()->whereNotNull('beginned_at')->whereNull('finished_at')->whereDate('beginned_at', ">", DB::raw('begin_at'))->count();
- 
-     
-         return view('dashboard', [
-             'nbrTotalTaches' => $nbrTotalTaches,
-             'nbrTachesTerminees' => $nbrTachesTerminees,
-             'nbrTachesTermineesEnRetard' => $nbrTachesTermineesEnRetard,
-             'nrbTachesNondemarrees' => $nrbTachesNondemarrees,
-             'nbrTachesEnCours' => $nbrTachesEnCours,
-             'nbrTachesDemarreesEnRetard' => $nbrTachesDemarreesEnRetard,
-         ]);
+     public function dashboard(){
+        $user = User::find(Auth::id());
+
+        $tasksEcheanceProches = $user->tasks()->where('group_id', null)->homeTasks()->get();
+
+        $nbrTotalTaches = $user->tasks()->where('group_id', '=', null) ->count();
+
+        $nbrTachesTerminees = $user->tasks()->tasksTerminees()->count();
+
+        $nbrTachesTermineesEnRetard = $user->tasks()->tasksTermineesRetard()->count();
+
+        $nrbTachesNondemarrees =  $user->tasks()->where('group_id', '=', null) ->whereNull('beginned_at')->count();
+
+        $nbrTachesEnCours = $user->tasks()->where('group_id', '=', null) ->tasksEnCours()->count();
+
+        $nbrTachesDemarreesEnRetard = $user->tasks()->tasksDemarreesEnRetard()->count();
+
+        
+        return view('dashboard', [
+            'nbrTotalTaches' => $nbrTotalTaches,
+            'nbrTachesTerminees' => $nbrTachesTerminees,
+            'nbrTachesTermineesEnRetard' => $nbrTachesTermineesEnRetard,
+            'nrbTachesNondemarrees' => $nrbTachesNondemarrees,
+            'nbrTachesEnCours' => $nbrTachesEnCours,
+            'nbrTachesDemarreesEnRetard' => $nbrTachesDemarreesEnRetard,
+            'tasksEcheanceProches' =>$tasksEcheanceProches,
+        ]);
+
      }
 
      public function tasksTermineesRetard(){
 
         $user = User::find(Auth::id());
-        $tasks = $user->tasks()->tasksTermineesRetard()->paginate(15);
+        $tasks = $user->tasks()->tasksTermineesRetard()->get();
 
         return view('task.terminees_retard', [
+            'tasks' => $tasks,
+        ]);
+    }
+    
+     public function tasksDemarreesRetard(){
+
+        $user = User::find(Auth::id());
+
+        $tasks = $user->tasks()->tasksDemarreesEnRetard()->get();
+
+
+        return view('task.demarres_retard', [
             'tasks' => $tasks,
         ]);
     }

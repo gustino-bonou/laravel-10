@@ -35,16 +35,20 @@
                 <td class="font-weight-bold @if($task->level == 'low') text-secondary  @elseif($task->level == 'high') text-danger @elseif($task->level == 'medium') text-warning @endif">{{ Str::ucfirst($task->level) }}</td>
                 <td>
                     <div class="d-flex gap-2 w-100 justify-content-end">
+                        @can('update', $task)
                         <a href="{{ route('task.edit', ['task' => $task->id ]) }}" class="btn btn-primary m-1 btn-sm">Editer</a>
                         {{-- Pour vérifier si l'utilisateur a le droit avant d'afficher le bouton --}}
 
+                        @can('updateGroupTask', $task)
                           <form action="{{ route('task.destroy', $task->id) }}" method="post">
                                 @csrf
                                 @method('delete')
                                 <button class="btn btn-danger m-1 btn-sm">Supprimer</button>
                             </form>
+                        @endcan
                             <a href="{{ route('task.marque.finish', $task->id) }}" class="btn btn-success m-1 btn-sm">MCT</a>
-                            
+
+                        @endcan
                     </div>
                 </td>
             </tr>

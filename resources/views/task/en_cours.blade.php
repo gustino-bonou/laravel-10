@@ -50,8 +50,8 @@
                 </td>
             </tr>
         @empty
-        <div>
-            
+        <div class=" text-center">
+            <h5 class="not-task-info">Aucune tache en cours</h5>
         </div>
         @endforelse
 

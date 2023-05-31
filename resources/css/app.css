@@ -120,7 +120,17 @@ a{
     background-color: #e6e6e6;
   }
   
+  .table-stats{
+    margin-top: 5%;
+    margin-bottom: 8%;
+  }
   
+  .not-task-info{
+    text-justify: auto;
+    text-align: center;
+    margin: 3%;
+    color: #333;
+  }
 
 /*   .card {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
@@ -203,12 +213,12 @@ a{
     -webkit-transform: rotate(45deg);
   }
 
-  .container {
+/*   .container {
     border-bottom: 2px solid #000000;
     display: flex;
     height: 200px;
     width: 100%;
-}
+} */
 
 
   /* anime hover

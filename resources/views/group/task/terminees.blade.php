@@ -37,13 +37,17 @@
                     <div class="d-flex gap-2 w-100 justify-content-end">
                         {{-- Pour vérifier si l'utilisateur a le droit avant d'afficher le bouton --}}
 
-                        <a href="{{ route('task.edit', ['task' => $task->id ]) }}" class="btn btn-primary m-1 btn-sm">Détails</a>
+                        @can('update', $task)
+                            <a href="{{ route('task.edit', ['task' => $task->id ]) }}" class="btn btn-primary m-1 btn-sm">Détails</a>
 
-                          <form action="{{ route('task.destroy', $task->id) }}" method="post">
-                                @csrf
-                                @method('delete')
-                                <button class="btn btn-danger m-1 btn-sm">Supprimer</button>
-                         </form>
+                            @can('updateGroupTask')
+                                <form action="{{ route('task.destroy', $task->id) }}" method="post">
+                                    @csrf
+                                    @method('delete')
+                                    <button class="btn btn-danger m-1 btn-sm">Supprimer</button>
+                                </form>
+                            @endcan
+                         @endcan
 
                             
                     </div>

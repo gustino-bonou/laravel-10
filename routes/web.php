@@ -24,7 +24,7 @@ use App\Http\Controllers\TaskController;
     return view('welcome');
 }); */
 
-Route::get('/', [TaskController::class, 'statistiques'])->middleware('auth')->name('home');
+Route::get('/', [TaskController::class, 'dashboard'])->middleware('auth')->name('home');
 
 Route::get('/login', [AuthController::class, 'formLogin'])->name('auth.formLogin')->middleware('guest');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login')->middleware('guest');
@@ -55,8 +55,7 @@ Route::prefix('/blog')->name('blog.')->controller(BlogController::class)->group(
 Route::resource('/task', TaskController::class)->middleware('auth')->except(['show', 'create', 'edit']);
 Route::get('/task/{task}/edit', [TaskController::class, 'edit'])->middleware('auth')->name('task.edit');
 
-Route::get('/task/mynotifications', [HomeController::class, 'beginTaskNotification'])->middleware('auth')->name('task.group.mynotificaions');
-Route::get('/task/mynotifications/{notification}/detail', [HomeController::class, 'notificationDetail'])->middleware('auth')->name('task.group.notification.detail');
+Route::get('/task/mynotifications', [HomeController::class, 'allNotificaions'])->middleware('auth')->name('task.mynotificaions');
 
 Route::get('/task/create/{group?}', [TaskController::class, 'create'])->middleware('auth')->name('task.create');
 
@@ -71,6 +70,7 @@ Route::prefix('/task')->name('task.')->middleware('auth')->group(function(){
     Route::get('terminees', [TaskController::class, 'tachesTerminees'])->name('terminees');
     Route::get('en_cours', [TaskController::class, 'tachesEncours'])->name('en_cours');
     Route::get('a_venir', [TaskController::class, 'tachesAVenir'])->name('a_venir');
+    Route::get('demarrees/retard', [TaskController::class, 'tasksDemarreesRetard'])->name('demarree.retard');
     Route::get('terminees/retard', [TaskController::class, 'tasksTermineesRetard'])->name('retard');
 
 });

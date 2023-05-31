@@ -121,11 +121,11 @@
                     </button>
                     @else
 
-                    @can('update', $tache)
+                    @can('updateGroupTask', $tache)
 
-                    <button class="btn btn-primary btn-lg">
-                        Modifier
-                    </button>
+                        <button class="btn btn-primary btn-lg">
+                            Modifier
+                        </button>
 
                     @endcan
                     @endif

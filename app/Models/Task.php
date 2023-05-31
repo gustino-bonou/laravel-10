@@ -58,8 +58,14 @@ class Task extends Model
         $date1 = Carbon::parse($date1);
         $date2 = Carbon::parse($date2);
 
-        return $date1->diffInDays($date2);
+        if($date1->diffInDays($date2) === 0)
+        {
+            return $date1->diffAsCarbonInterval($date2);
+        }
+
+        return $date1->diffInDays($date2) . ' Jours';
     }
+
     public function getTaskStatus() 
     {
         $status = '';
@@ -70,7 +76,7 @@ class Task extends Model
         }
         elseif($this->beginned_at == null)
         {
-            $status = 'A venir';
+            $status = 'Nom démarree';
         }
         elseif($this->beginned_at !== null && $this->finished_at == null)
         {
@@ -80,21 +86,29 @@ class Task extends Model
         return $status;
     }
 
+
     public function scopeTasksEnCours(Builder $builder)
     {
         return $builder->whereNotNull('beginned_at')->whereNull('finished_at')->orderBy('finish_at', 'asc');
     }
+
     public function scopeTasksNonDemarrees(Builder $builder)
     {
-        return $builder->whereNull('beginned_at')->orderBy('begin_at', 'asc');
+        return $builder->whereNull('beginned_at')->orderBy('beginned_at', 'asc');
     }
+    public function scopeTasksDemarreesEnRetard(Builder $builder)
+    {
+        return $builder->where('group_id', '=', null) ->whereNotNull('beginned_at')->whereColumn('beginned_at', ">", 'begin_at');
+    }
+
     public function scopeTasksTerminees(Builder $builder)
     {
         return $builder->whereNotNull('beginned_at')->whereNotNull('finished_at')->orderBy('finished_at', 'asc');
     }
+
     public function scopeTasksTermineesRetard(Builder $builder)
     {
-        return $builder->whereNotNull('beginned_at')->whereNotNull('finished_at')->whereDate('finished_at', '>', DB::raw('finish_at'));
+        return $builder->whereColumn('finished_at', '>=', 'finish_at')->tasksTerminees();
     }
     public function scopeHomeTasks(Builder $builder)
     {
